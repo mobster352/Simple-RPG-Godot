@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhfsxtkb2com"]
+
+[ext_resource type="PackedScene" uid="uid://srfgwspo1ite" path="res://Objects/tree1.tscn" id="1_s0uww"]
+
+[node name="Decorations_Behind" type="Node2D"]
+
+[node name="Tree" parent="." instance=ExtResource("1_s0uww")]
+position = Vector2(864, 274)
+
+[node name="Tree2" parent="." instance=ExtResource("1_s0uww")]
+position = Vector2(800, 594)

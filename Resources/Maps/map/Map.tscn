@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://map"]
+
+[ext_resource type="PackedScene" path="res://Resources/Maps/map/Decorations_0.tscn" id="0_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/map/Buildings_1.tscn" id="1_id"]
+[ext_resource type="PackedScene" uid="uid://b1s8l1rbs5ytp" path="res://Resources/Maps/map/Ground_2.tscn" id="2_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/map/Ground_3.tscn" id="3_id"]
+
+[node name="map" type="Node2D"]
+
+[node name="Ground_3" parent="." instance=ExtResource("3_id")]
+visible = false
+
+[node name="Ground_2" parent="." instance=ExtResource("2_id")]
+
+[node name="Buildings_1" parent="." instance=ExtResource("1_id")]
+
+[node name="Decorations_0" parent="." instance=ExtResource("0_id")]
+collision_enabled = false

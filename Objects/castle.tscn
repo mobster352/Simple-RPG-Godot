@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkclgy6aabftt"]
+
+[ext_resource type="Texture2D" uid="uid://b8ywrmgqnsi6w" path="res://Resources/Blue Buildings/Castle.png" id="1_8dy34"]
+
+[node name="Castle" type="Node2D"]
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_8dy34")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprite/StaticBody2D"]
+position = Vector2(11, 19)
+polygon = PackedVector2Array(-148, -7, -135, 44, -10, 51, 106, 45, 127, -7)

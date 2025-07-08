@@ -1,0 +1,158 @@
+[gd_scene load_steps=15 format=3 uid="uid://map"]
+
+[ext_resource type="PackedScene" uid="uid://dc47ho4ycppwt" path="res://Resources/Maps/test_map/Decorations_0.tscn" id="0_id"]
+[ext_resource type="PackedScene" uid="uid://bl87v0sarupsy" path="res://Resources/Maps/test_map/Buildings_1.tscn" id="1_id"]
+[ext_resource type="PackedScene" uid="uid://ccoddx4ku6rmg" path="res://Objects/water_left_edge.tscn" id="1_yg8sa"]
+[ext_resource type="PackedScene" uid="uid://yfq1k6wh62nx" path="res://Resources/Maps/test_map/Decorations_Behind_2.tscn" id="2_id"]
+[ext_resource type="PackedScene" uid="uid://dm1onfuhlyi1a" path="res://Objects/water_mid.tscn" id="2_xcq1l"]
+[ext_resource type="PackedScene" uid="uid://c16a5fgmfguyi" path="res://Resources/Maps/test_map/Ground_3.tscn" id="3_id"]
+[ext_resource type="PackedScene" uid="uid://cmfk10i1wag1v" path="res://Objects/water_right_edge.tscn" id="3_u6njl"]
+[ext_resource type="PackedScene" uid="uid://dhfsxtkb2com" path="res://Maps/StartMap/decorations_behind.tscn" id="3_xcq1l"]
+[ext_resource type="PackedScene" uid="uid://c1nyetag5rc4c" path="res://Maps/StartMap/decorations.tscn" id="3_yj3pe"]
+[ext_resource type="PackedScene" uid="uid://b0uc2enei2iqr" path="res://Maps/StartMap/buildings.tscn" id="6_wq3im"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yj3pe"]
+size = Vector2(1848, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yg8sa"]
+size = Vector2(10, 1088)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xcq1l"]
+size = Vector2(8, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u6njl"]
+size = Vector2(1856, 8)
+
+[node name="map" type="Node2D"]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="Ground_3" parent="." instance=ExtResource("3_id")]
+
+[node name="Decorations_Behind_2" parent="." instance=ExtResource("2_id")]
+visible = false
+
+[node name="Decorations_Behind" parent="." instance=ExtResource("3_xcq1l")]
+y_sort_enabled = true
+
+[node name="Buildings_1" parent="." instance=ExtResource("1_id")]
+visible = false
+
+[node name="Buildings" parent="." instance=ExtResource("6_wq3im")]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="Decorations_0" parent="." instance=ExtResource("0_id")]
+visible = false
+
+[node name="Decorations" parent="." instance=ExtResource("3_yj3pe")]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="Water" type="Node2D" parent="."]
+
+[node name="WaterLeftEdge" parent="Water" instance=ExtResource("1_yg8sa")]
+position = Vector2(32, 1120)
+
+[node name="WaterMid" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(96, 1120)
+
+[node name="WaterMid2" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(160, 1120)
+
+[node name="WaterMid3" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(224, 1120)
+
+[node name="WaterMid4" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(288, 1120)
+
+[node name="WaterMid5" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(352, 1120)
+
+[node name="WaterMid6" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(416, 1120)
+
+[node name="WaterMid7" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(480, 1120)
+
+[node name="WaterMid8" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(544, 1120)
+
+[node name="WaterMid9" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(608, 1120)
+
+[node name="WaterMid10" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(672, 1120)
+
+[node name="WaterMid11" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(736, 1120)
+
+[node name="WaterMid12" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(800, 1120)
+
+[node name="WaterMid13" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(864, 1120)
+
+[node name="WaterMid14" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(928, 1120)
+
+[node name="WaterMid15" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(992, 1120)
+
+[node name="WaterMid16" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1056, 1120)
+
+[node name="WaterMid17" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1120, 1120)
+
+[node name="WaterMid18" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1184, 1120)
+
+[node name="WaterMid19" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1248, 1120)
+
+[node name="WaterMid20" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1312, 1120)
+
+[node name="WaterMid21" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1376, 1120)
+
+[node name="WaterMid22" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1440, 1120)
+
+[node name="WaterMid23" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1504, 1120)
+
+[node name="WaterMid24" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1568, 1120)
+
+[node name="WaterMid25" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1632, 1120)
+
+[node name="WaterMid26" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1696, 1120)
+
+[node name="WaterMid27" parent="Water" instance=ExtResource("2_xcq1l")]
+position = Vector2(1760, 1120)
+
+[node name="WaterLeftEdge2" parent="Water" instance=ExtResource("3_u6njl")]
+position = Vector2(1824, 1120)
+
+[node name="WorldBounds" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(924, 3)
+shape = SubResource("RectangleShape2D_yj3pe")
+one_way_collision_margin = 0.0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(-5, 544)
+shape = SubResource("RectangleShape2D_yg8sa")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(1852, 540)
+shape = SubResource("RectangleShape2D_xcq1l")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(928, 1084)
+shape = SubResource("RectangleShape2D_u6njl")

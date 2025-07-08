@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0uc2enei2iqr"]
+
+[ext_resource type="PackedScene" uid="uid://cfksjw3kj4u7p" path="res://Objects/house1.tscn" id="1_5bugp"]
+[ext_resource type="PackedScene" uid="uid://dkclgy6aabftt" path="res://Objects/castle.tscn" id="2_70o3r"]
+
+[node name="Buildings" type="Node2D"]
+
+[node name="House" parent="." instance=ExtResource("1_5bugp")]
+position = Vector2(385, 287)
+
+[node name="House2" parent="." instance=ExtResource("1_5bugp")]
+position = Vector2(832, 288)
+
+[node name="House3" parent="." instance=ExtResource("1_5bugp")]
+position = Vector2(385, 606)
+
+[node name="House4" parent="." instance=ExtResource("1_5bugp")]
+position = Vector2(832, 609)
+
+[node name="House5" parent="." instance=ExtResource("1_5bugp")]
+position = Vector2(1281, 416)
+
+[node name="Castle" parent="." instance=ExtResource("2_70o3r")]
+position = Vector2(1569, 192)

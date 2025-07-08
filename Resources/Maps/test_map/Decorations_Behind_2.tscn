@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=4 uid="uid://yfq1k6wh62nx"]
+
+[ext_resource type="TileSet" uid="uid://c8jaxeo7agc0o" path="res://Resources/Maps/test_map/tileset.tres" id="tileset_id"]
+
+[node name="Decorations_Behind_2" type="TileMapLayer"]
+tile_map_data = PackedByteArray("AAAMAAIAAAAAAAAAAAANAAIAAAABAAAAAAAOAAIAAAACAAAAAAAMAAMAAAADAAAAAAANAAMAAAAEAAAAAAAOAAMAAAAFAAAAAAAMAAQAAAAGAAAAAAANAAQAAAAHAAAAAAAOAAQAAAAAAAEAAAALAAcAAAAAAAAAAAAMAAcAAAABAAAAAAANAAcAAAACAAAAAAALAAgAAAADAAAAAAAMAAgAAAAEAAAAAAANAAgAAAAFAAAAAAALAAkAAAAGAAAAAAAMAAkAAAAHAAAAAAANAAkAAAAAAAEAAAA=")
+tile_set = ExtResource("tileset_id")
+collision_enabled = false
