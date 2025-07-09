@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ikjkfcqd13gp"]
+[gd_scene load_steps=5 format=3 uid="uid://ikjkfcqd13gp"]
 
 [ext_resource type="Texture2D" uid="uid://b3bh23wtrn6uj" path="res://Resources/Water/Water Background color.png" id="1_10cxu"]
 [ext_resource type="PackedScene" uid="uid://cxa5348c0w03t" path="res://Characters/Player/player.tscn" id="1_fl2so"]
 [ext_resource type="PackedScene" uid="uid://map" path="res://Resources/Maps/test_map/Map.tscn" id="1_yrlk3"]
+[ext_resource type="PackedScene" uid="uid://3ol70s61sd67" path="res://Characters/enemy.tscn" id="4_4ag65"]
 
 [node name="StartMap" type="Node2D"]
 z_as_relative = false
@@ -15,13 +16,16 @@ texture = ExtResource("1_10cxu")
 [node name="YSort" type="Node2D" parent="."]
 y_sort_enabled = true
 position = Vector2(1427, 1413.5)
-scale = Vector2(157, 87.1719)
 
 [node name="map" parent="YSort" instance=ExtResource("1_yrlk3")]
-position = Vector2(-9.08917, -16.2151)
-scale = Vector2(0.00955414, 0.0172074)
+position = Vector2(-1427, -1413.5)
+scale = Vector2(1.5, 1.5)
 
 [node name="Player" parent="YSort" instance=ExtResource("1_fl2so")]
 unique_name_in_owner = true
-position = Vector2(-7.77707, 1.12995)
-scale = Vector2(0.00636943, 0.0114716)
+position = Vector2(-23, -787.5)
+scale = Vector2(1, 1)
+
+[node name="Enemy" parent="YSort" instance=ExtResource("4_4ag65")]
+position = Vector2(108, -782.5)
+scale = Vector2(1, 1)

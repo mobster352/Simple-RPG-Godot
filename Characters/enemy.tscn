@@ -1,0 +1,84 @@
+[gd_scene load_steps=13 format=3 uid="uid://3ol70s61sd67"]
+
+[ext_resource type="Texture2D" uid="uid://c7jwqr7einrm6" path="res://Resources/Red Units/Warrior/Warrior_Idle.png" id="1_04wy3"]
+[ext_resource type="Script" uid="uid://do8ngfss4a7kf" path="res://Scripts/enemy.gd" id="1_rtu5t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jdd5n"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cfn04"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aaqyu"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_udol0"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tidr3"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfbfn"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vnn4"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ko31"]
+atlas = ExtResource("1_04wy3")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_elrq2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jdd5n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cfn04")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aaqyu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_udol0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tidr3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gfbfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vnn4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ko31")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_573b1"]
+radius = 19.0
+height = 70.0
+
+[node name="Enemy" type="RigidBody2D" groups=["enemy"]]
+y_sort_enabled = true
+gravity_scale = 0.0
+script = ExtResource("1_rtu5t")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_elrq2")
+animation = &"Idle"
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_573b1")
