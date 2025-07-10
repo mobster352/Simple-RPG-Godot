@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://3ol70s61sd67"]
+[gd_scene load_steps=21 format=3 uid="uid://3ol70s61sd67"]
 
 [ext_resource type="Texture2D" uid="uid://c7jwqr7einrm6" path="res://Resources/Red Units/Warrior/Warrior_Idle.png" id="1_04wy3"]
 [ext_resource type="Script" uid="uid://do8ngfss4a7kf" path="res://Scripts/enemy.gd" id="1_rtu5t"]
+[ext_resource type="Texture2D" uid="uid://dlqh3q5mic4kv" path="res://Resources/Red Units/Warrior/Warrior_Run.png" id="3_sdfay"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jdd5n"]
 atlas = ExtResource("1_04wy3")
@@ -35,6 +36,30 @@ region = Rect2(1152, 0, 192, 192)
 atlas = ExtResource("1_04wy3")
 region = Rect2(1344, 0, 192, 192)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mpxx0"]
+atlas = ExtResource("3_sdfay")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3tsq0"]
+atlas = ExtResource("3_sdfay")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gh648"]
+atlas = ExtResource("3_sdfay")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rq3xi"]
+atlas = ExtResource("3_sdfay")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gd1y4"]
+atlas = ExtResource("3_sdfay")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dcb8l"]
+atlas = ExtResource("3_sdfay")
+region = Rect2(960, 0, 192, 192)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_elrq2"]
 animations = [{
 "frames": [{
@@ -65,11 +90,37 @@ animations = [{
 "loop": true,
 "name": &"Idle",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mpxx0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3tsq0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gh648")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rq3xi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gd1y4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dcb8l")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 10.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_573b1"]
 radius = 19.0
 height = 70.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rtu5t"]
+radius = 402.011
 
 [node name="Enemy" type="RigidBody2D" groups=["enemy"]]
 y_sort_enabled = true
@@ -78,7 +129,17 @@ script = ExtResource("1_rtu5t")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_elrq2")
-animation = &"Idle"
+animation = &"Walk"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_573b1")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="Sight" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_rtu5t")
+
+[node name="MovementLine" type="Line2D" parent="."]
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
