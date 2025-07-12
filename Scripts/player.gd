@@ -1,20 +1,28 @@
 extends CharacterBody2D
 
+var maxHP = 100
+var currentHP = maxHP
+
 @export var speed = 100
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var attackHitbox = $Area2D/AttackHitbox
+@onready var hitbox = $Hitbox
+@onready var healthBar = $CanvasLayer/HealthBar
+@onready var deathControl = $CanvasLayer/DeathControl
 
 var isAttacking = false
+var startPosition:Vector2
 
-#@onready var enemyNodes:Array
-#func _ready() -> void:
-	#var enemyGroupNodes = get_tree().get_nodes_in_group("enemy")
-	#for enemyNode in enemyGroupNodes:
-		#enemyNodes.append(enemyNode)
+func _ready() -> void:
+	startPosition = global_position
 
 func _process(_delta: float) -> void:
-	movePlayer()
 	playAnimations()
+	healthBar.value = currentHP
+	
+func _physics_process(delta: float) -> void:
+	if visible:
+		movePlayer()
 
 func movePlayer():
 	if isAttacking:
@@ -47,6 +55,15 @@ func playAnimations():
 		isAttacking = true 
 		attackHitbox.disabled = false
 		sprite.play("Attack")
+		
+func damage(dmg:int):
+	currentHP -= dmg
+	if currentHP <= 0:
+		print("You Died")
+		deathControl.show()
+		hide()
+		hitbox.disabled = true
+		#get_tree().reload_current_scene()
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "Attack":
@@ -57,3 +74,10 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		if body.has_method("damage"):
 			body.call("damage", 1)
+
+func _on_respawn_button_pressed() -> void:
+	global_position = startPosition
+	currentHP = maxHP
+	show()
+	hitbox.disabled = false
+	deathControl.hide()

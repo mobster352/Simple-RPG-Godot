@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cxa5348c0w03t"]
+[gd_scene load_steps=28 format=3 uid="uid://cxa5348c0w03t"]
 
 [ext_resource type="Texture2D" uid="uid://cjb73ied6rmjw" path="res://Resources/Blue Units/Warrior/Warrior_Idle.png" id="1_6xdwp"]
 [ext_resource type="Script" uid="uid://ddsjmq6y2nhcr" path="res://Scripts/player.gd" id="1_j341n"]
@@ -156,9 +156,17 @@ height = 66.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bqsbk"]
 size = Vector2(45, 103)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bqsbk"]
+bg_color = Color(0.699363, 0, 0.168303, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_bqsbk"]
+font_size = 80
+font_color = Color(0.719454, 2.55093e-06, 5.77569e-07, 1)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_as_relative = false
 y_sort_enabled = true
+collision_mask = 5
 script = ExtResource("1_j341n")
 speed = 200
 
@@ -174,11 +182,66 @@ shape = SubResource("CapsuleShape2D_6xdwp")
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 2
+collision_mask = 2
 
 [node name="AttackHitbox" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(45, 7.5)
 shape = SubResource("RectangleShape2D_bqsbk")
 disabled = true
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 212.0
+offset_bottom = 35.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_bqsbk")
+rounded = true
+show_percentage = false
+
+[node name="DeathControl" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 403.5
+offset_top = 269.0
+offset_right = 443.5
+offset_bottom = 309.0
+
+[node name="Label" type="Label" parent="CanvasLayer/DeathControl"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 325.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "You Died"
+label_settings = SubResource("LabelSettings_bqsbk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RespawnButton" type="Button" parent="CanvasLayer/DeathControl"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 48.5
+offset_top = 87.0
+offset_right = 264.5
+offset_bottom = 118.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "RESPAWN"
+
 [connection signal="animation_finished" from="Sprite" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="pressed" from="CanvasLayer/DeathControl/RespawnButton" to="." method="_on_respawn_button_pressed"]

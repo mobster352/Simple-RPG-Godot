@@ -1,8 +1,25 @@
-[gd_scene load_steps=21 format=3 uid="uid://3ol70s61sd67"]
+[gd_scene load_steps=26 format=3 uid="uid://3ol70s61sd67"]
 
 [ext_resource type="Texture2D" uid="uid://c7jwqr7einrm6" path="res://Resources/Red Units/Warrior/Warrior_Idle.png" id="1_04wy3"]
 [ext_resource type="Script" uid="uid://do8ngfss4a7kf" path="res://Scripts/enemy.gd" id="1_rtu5t"]
+[ext_resource type="Texture2D" uid="uid://bnskdsv4n36b" path="res://Resources/Red Units/Warrior/Warrior_Attack1.png" id="2_mpxx0"]
 [ext_resource type="Texture2D" uid="uid://dlqh3q5mic4kv" path="res://Resources/Red Units/Warrior/Warrior_Run.png" id="3_sdfay"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u75dg"]
+atlas = ExtResource("2_mpxx0")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n8kr"]
+atlas = ExtResource("2_mpxx0")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oyr2l"]
+atlas = ExtResource("2_mpxx0")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bf4kt"]
+atlas = ExtResource("2_mpxx0")
+region = Rect2(576, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jdd5n"]
 atlas = ExtResource("1_04wy3")
@@ -64,6 +81,23 @@ region = Rect2(960, 0, 192, 192)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_u75dg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7n8kr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oyr2l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bf4kt")
+}],
+"loop": false,
+"name": &"Attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_jdd5n")
 }, {
 "duration": 1.0,
@@ -122,14 +156,15 @@ height = 70.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_rtu5t"]
 radius = 402.011
 
-[node name="Enemy" type="RigidBody2D" groups=["enemy"]]
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 y_sort_enabled = true
-gravity_scale = 0.0
+collision_layer = 2
+collision_mask = 0
 script = ExtResource("1_rtu5t")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_elrq2")
-animation = &"Walk"
+animation = &"Attack"
 
 [node name="Hitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_573b1")
@@ -141,5 +176,16 @@ shape = SubResource("CircleShape2D_rtu5t")
 
 [node name="MovementLine" type="Line2D" parent="."]
 
+[node name="AttackTimer" type="Timer" parent="."]
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+simplify_path = true
+avoidance_enabled = true
+debug_enabled = true
+
+[connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
+[connection signal="navigation_finished" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_navigation_finished"]
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
