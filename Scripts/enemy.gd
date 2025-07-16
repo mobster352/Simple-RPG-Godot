@@ -7,6 +7,8 @@ extends CharacterBody2D
 
 @onready var navAgent:NavigationAgent2D = $NavigationAgent2D
 
+var potion
+
 enum states {
 	IDLE,
 	CHASE,
@@ -27,7 +29,7 @@ const MOVEMENT_OFFSET:int = 50
 const PLAYER_X_ALIGNMENT:float = 0.5
 const ATTACK_TIMER_SECS:float = 3.0
 const RESET_DISTANCE:float = 1000
-const ATTACK_DAMAGE:int = 50
+const ATTACK_DAMAGE:int = 4
 
 var state = states.IDLE
 var player:CharacterBody2D
@@ -38,6 +40,7 @@ func _ready() -> void:
 	startPosition = global_position
 	canAttack = true
 	canMove = false
+	potion = preload("res://Objects/potion.tscn").instantiate()
 	
 func _process(_delta: float) -> void:
 	playAnimation()
@@ -126,6 +129,15 @@ func attack():
 func damage(dmg:int):
 	hp -= dmg
 	if hp <= 0:
+		#var randomSpawn = randi() % 4 + 1 # 25% chance to spawn
+		var randomSpawn = randi_range(1,4)
+		if randomSpawn > 2:
+			potion.position = position
+			var parent = get_node("../")
+			parent.add_child(potion)
+		if player:
+			if player.has_method("levelUp"):
+				player.call("levelUp")
 		queue_free()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:

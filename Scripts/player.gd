@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-var maxHP = 100
+var level = 1
+var maxHP = 10
 var currentHP = maxHP
 
 @export var speed = 100
@@ -58,12 +59,26 @@ func playAnimations():
 		
 func damage(dmg:int):
 	currentHP -= dmg
+	print("HP: ", currentHP)
 	if currentHP <= 0:
 		print("You Died")
 		deathControl.show()
 		hide()
 		hitbox.disabled = true
-		#get_tree().reload_current_scene()
+		
+func heal(hp:int):
+	if currentHP + hp <= maxHP:
+		currentHP += hp
+	else:
+		currentHP = maxHP
+		
+func levelUp():
+	if level < 3:
+		level += 1
+		var hp = healthBar.getHpFromPlayerLevel(level)
+		maxHP = hp.maxValue
+		currentHP = maxHP
+		print("Level Up: ", level)
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "Attack":
@@ -81,3 +96,4 @@ func _on_respawn_button_pressed() -> void:
 	show()
 	hitbox.disabled = false
 	deathControl.hide()
+	get_tree().reload_current_scene()
