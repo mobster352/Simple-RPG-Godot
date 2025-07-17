@@ -11,21 +11,17 @@ var hpArray:Array
 var currentHp:Hp
 
 func _ready() -> void:
-	var hp = Hp.new()
-	hp.level = 1
-	hp.size = 50
-	hp.maxValue = 10
-	hpArray.append(hp)
-	hp = Hp.new()
-	hp.level = 2
-	hp.size = 75
-	hp.maxValue = 20
-	hpArray.append(hp)
-	hp = Hp.new()
-	hp.level = 3
-	hp.size = 100
-	hp.maxValue = 40
-	hpArray.append(hp)
+	var config = ConfigFile.new()
+	var err = config.load("res://Files/health_levels.cfg")
+	if err != OK:
+		print("File did not load")
+		return
+	for level in config.get_sections():
+		var hp = Hp.new()
+		hp.level = config.get_value(level, "level")
+		hp.size = config.get_value(level, "size")
+		hp.maxValue = config.get_value(level, "max_hp")
+		hpArray.append(hp)
 	currentHp = hpArray.get(0)
 	
 	max_value = currentHp.maxValue

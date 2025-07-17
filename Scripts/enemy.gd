@@ -2,8 +2,10 @@ extends CharacterBody2D
 
 @onready var sprite:AnimatedSprite2D = $Sprite
 @onready var hitbox:CollisionShape2D = $Hitbox
-@onready var movementLine:Line2D = $MovementLine
 @onready var attackTimer:Timer = $AttackTimer
+@onready var healthBar:ProgressBar = $Control/HealthBar
+@onready var attackHitbox = $AttackArea/AttackHitbox
+@onready var flyingTextNode = $FlyingTextNode
 
 @onready var navAgent:NavigationAgent2D = $NavigationAgent2D
 
@@ -23,6 +25,7 @@ var startPosition:Vector2
 var canAttack:bool
 var atPlayer:bool
 var canMove:bool
+var inRange:bool
 
 const CHASE_DISTANCE:int = 25
 const MOVEMENT_OFFSET:int = 50
@@ -35,15 +38,17 @@ var state = states.IDLE
 var player:CharacterBody2D
 
 func _ready() -> void:
-	hp = 3
+	hp = 30
 	speed = 120
 	startPosition = global_position
 	canAttack = true
 	canMove = false
+	inRange = false
 	potion = preload("res://Objects/potion.tscn").instantiate()
 	
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	playAnimation()
+	healthBar.value = hp
 	
 func _physics_process(delta: float) -> void:
 	move(delta)
@@ -71,7 +76,7 @@ func move(delta: float):
 		if direction.x < 0:
 			sprite.flip_h = true
 		else:
-			sprite.flip_h = false	
+			sprite.flip_h = false
 		canMove = true
 	
 	elif state == states.CHASE:	
@@ -122,12 +127,16 @@ func attack():
 	state = states.ATTACK
 	canAttack = false
 	attackTimer.start(ATTACK_TIMER_SECS)
-	if player:
-		if player.has_method("damage"):
-			player.call("damage", ATTACK_DAMAGE)
+	if sprite.flip_h:
+		if attackHitbox.position.x > 0:
+			attackHitbox.position.x = -attackHitbox.position.x
+	else:
+		attackHitbox.position.x = abs(attackHitbox.position.x)
+	attackHitbox.disabled = false
 			
 func damage(dmg:int):
 	hp -= dmg
+	Global.makeFlyingTextLabel(global_position, str(dmg), Color.RED, Global.LABEL_SIZE_BIG)
 	if hp <= 0:
 		#var randomSpawn = randi() % 4 + 1 # 25% chance to spawn
 		var randomSpawn = randi_range(1,4)
@@ -136,8 +145,8 @@ func damage(dmg:int):
 			var parent = get_node("../")
 			parent.add_child(potion)
 		if player:
-			if player.has_method("levelUp"):
-				player.call("levelUp")
+			if player.has_method("calculateExp"):
+				player.call("calculateExp", 75)
 		queue_free()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -152,6 +161,10 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == "Attack":
+		if player && inRange:
+			if player.has_method("damage"):
+				player.call("damage", ATTACK_DAMAGE)
+		attackHitbox.disabled = true
 		state = states.IDLE
 
 func _on_attack_timer_timeout() -> void:
@@ -166,3 +179,13 @@ func _on_navigation_agent_2d_navigation_finished() -> void:
 	if state == states.RESET:
 		state = states.IDLE
 		canMove = false
+
+
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		inRange = true
+
+
+func _on_attack_area_body_exited(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		inRange = false

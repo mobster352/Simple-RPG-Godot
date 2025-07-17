@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cxa5348c0w03t"]
+[gd_scene load_steps=30 format=3 uid="uid://cxa5348c0w03t"]
 
 [ext_resource type="Texture2D" uid="uid://cjb73ied6rmjw" path="res://Resources/Blue Units/Warrior/Warrior_Idle.png" id="1_6xdwp"]
 [ext_resource type="Script" uid="uid://ddsjmq6y2nhcr" path="res://Scripts/player.gd" id="1_j341n"]
@@ -164,6 +164,9 @@ bg_color = Color(0.699363, 0, 0.168303, 1)
 font_size = 80
 font_color = Color(0.719454, 2.55093e-06, 5.77569e-07, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xf5fp"]
+bg_color = Color(0.0755004, 0.427178, 0.551769, 1)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_as_relative = false
 y_sort_enabled = true
@@ -245,6 +248,27 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "RESPAWN"
 
+[node name="ExpBar" type="ProgressBar" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -376.0
+offset_top = -16.0
+offset_right = 374.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_xf5fp")
+rounded = true
+show_percentage = false
+
+[node name="FlyingTextNode" type="Node2D" parent="."]
+
+[node name="AttackTimer" type="Timer" parent="."]
+
 [connection signal="animation_finished" from="Sprite" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="pressed" from="CanvasLayer/DeathControl/RespawnButton" to="." method="_on_respawn_button_pressed"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]

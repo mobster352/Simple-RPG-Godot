@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://3ol70s61sd67"]
+[gd_scene load_steps=28 format=3 uid="uid://3ol70s61sd67"]
 
 [ext_resource type="Texture2D" uid="uid://c7jwqr7einrm6" path="res://Resources/Red Units/Warrior/Warrior_Idle.png" id="1_04wy3"]
 [ext_resource type="Script" uid="uid://do8ngfss4a7kf" path="res://Scripts/enemy.gd" id="1_rtu5t"]
@@ -156,6 +156,12 @@ height = 70.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_rtu5t"]
 radius = 402.011
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mpxx0"]
+size = Vector2(71.5, 103)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mpxx0"]
+bg_color = Color(0.698039, 0, 0.168627, 1)
+
 [node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 y_sort_enabled = true
 collision_layer = 2
@@ -174,18 +180,50 @@ shape = SubResource("CapsuleShape2D_573b1")
 [node name="Sight" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_rtu5t")
 
-[node name="MovementLine" type="Line2D" parent="."]
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="AttackHitbox" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(31.75, 7.5)
+shape = SubResource("RectangleShape2D_mpxx0")
+disabled = true
 
 [node name="AttackTimer" type="Timer" parent="."]
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 simplify_path = true
 avoidance_enabled = true
-debug_enabled = true
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -44.0
+offset_top = -83.0
+offset_right = 44.0
+offset_bottom = -66.0
+
+[node name="HealthBar" type="ProgressBar" parent="Control"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -13.5
+offset_bottom = 13.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_styles/fill = SubResource("StyleBoxFlat_mpxx0")
+max_value = 30.0
+value = 2.0
+show_percentage = false
+
+[node name="FlyingTextNode" type="Node2D" parent="."]
 
 [connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="navigation_finished" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_navigation_finished"]
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
