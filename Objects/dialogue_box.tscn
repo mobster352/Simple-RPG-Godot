@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://ca7ujnyah2h3n"]
+
+[ext_resource type="Script" uid="uid://dxkaqr61ms4qu" path="res://Scripts/dialogue_box.gd" id="1_4d7rg"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cem2d"]
+font_size = 24
+outline_size = 1
+outline_color = Color(0.699653, 0.699653, 0.699653, 1)
+
+[node name="DialogueBox" type="Node2D"]
+script = ExtResource("1_4d7rg")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -496.0
+offset_top = -200.0
+offset_right = 504.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.235294)
+
+[node name="Dialogue" type="Label" parent="CanvasLayer/Background"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 176.0
+offset_top = -22.0
+offset_right = -184.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Test"
+label_settings = SubResource("LabelSettings_cem2d")
+autowrap_mode = 3
+visible_characters = 0
+visible_ratio = 0.0
+
+[node name="LeftSprite" type="AnimatedSprite2D" parent="CanvasLayer"]
+position = Vector2(176, 528)
+scale = Vector2(0.75, 0.75)
+
+[node name="RightSprite" type="AnimatedSprite2D" parent="CanvasLayer"]
+position = Vector2(992, 528)
+scale = Vector2(0.75, 0.75)
+flip_h = true

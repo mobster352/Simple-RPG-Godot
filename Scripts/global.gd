@@ -1,7 +1,11 @@
 extends Node
 
+signal show_dialogue
+signal increment_dialogue
+
 const LABEL_SPEED = 5
 const LABEL_SIZE_SMALL = 20
+const LABEL_SIZE_MEDIUM = 25
 const LABEL_SIZE_BIG = 30
 
 var flyingTextNode:Node
@@ -30,10 +34,9 @@ func makeFlyingTextLabel(global_position:Vector2, text:String, color:Color, labe
 	var timer = Timer.new()
 	timer.wait_time = 1
 	timer.one_shot = true
-	timer.autostart = true
 	timer.connect("timeout", _on_timer_timeout.bind(label))
-	timer.start()
 	label.add_child(timer)
+	timer.start()
 	
 func _on_timer_timeout(label:Label):
 	label.queue_free()

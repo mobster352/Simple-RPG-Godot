@@ -4,9 +4,10 @@ var level = 1
 var maxHP = 10
 var currentHP = maxHP
 var currentExp = 0
+var stamina = 100
+var weapon = Vector2(7,13)
 
 @export var speed = 100
-const ATTACK_TIMER_SECS:float = 0.5
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var attackHitbox = $Area2D/AttackHitbox
@@ -15,11 +16,17 @@ const ATTACK_TIMER_SECS:float = 0.5
 @onready var deathControl = $CanvasLayer/DeathControl
 @onready var expBar = $CanvasLayer/ExpBar
 @onready var flyingTextNode = $FlyingTextNode
-@onready var attackTimer = $AttackTimer
+@onready var staminaBar = $Control/StaminaBar
+@onready var levelLabel = $CanvasLayer/LevelLabel
+@onready var levelUpLabel = $Control/StaminaBar/LevelUpLabel
+@onready var healthLabel = $CanvasLayer/HealthBar/HealthLabel
 
-var canAttack = true
 var isAttacking = false
 var startPosition:Vector2
+var canMove:bool = true
+
+var textArray:Array = ["test test test"]
+var currentTextIndex:int = 0
 
 class ExpLevel:
 	var level:int
@@ -37,21 +44,39 @@ func _ready() -> void:
 		print("File did not load")
 		return
 	for level in config.get_sections():
-		var exp = ExpLevel.new()
-		exp.level = config.get_value(level, "level")
-		exp.expNextLevel = config.get_value(level, "exp")
-		exp.attackDamage = config.get_value(level, "attack_damage")
-		expArray.append(exp)
+		var xp = ExpLevel.new()
+		xp.level = config.get_value(level, "level")
+		xp.expNextLevel = config.get_value(level, "exp")
+		expArray.append(xp)
 	currentExpLevel = expArray.get(0)
 	expBar.max_value = currentExpLevel.expNextLevel
 	expBar.value = 0
+	Global.show_dialogue.connect(_on_show_dialogue)
 
 func _process(delta: float) -> void:
 	playAnimations()
+	if stamina < 100:
+		staminaBar.show()
+		stamina += 1 * 10 * delta
+	else:
+		staminaBar.hide()
+	healthLabel.text = str(currentHP)
 	healthBar.value = currentHP
+	staminaBar.value = stamina
+	levelLabel.text = str("Lv ", level)
+	
+	#if Input.is_action_just_pressed("Use"):
+		#canMove = false
+		#if currentTextIndex >= textArray.size():
+			#Global.show_dialogue.emit("",null,null)
+			#currentTextIndex = 0
+			#canMove = true
+		#else:
+			#Global.show_dialogue.emit(textArray.get(currentTextIndex), sprite.sprite_frames, null)
+			#currentTextIndex += 1
 	
 func _physics_process(_delta: float) -> void:
-	if visible:
+	if visible && canMove:
 		movePlayer()
 
 func movePlayer():
@@ -81,12 +106,11 @@ func playAnimations():
 		sprite.play("Idle")
 	else:
 		sprite.play("Walk")
-	if Input.is_action_just_pressed("Attack") && canAttack:
-		attackTimer.start(ATTACK_TIMER_SECS)
-		canAttack = false
-		isAttacking = true 
+	if Input.is_action_just_pressed("Attack") && stamina >= 25 && canMove:
+		isAttacking = true
 		attackHitbox.disabled = false
 		sprite.play("Attack")
+		stamina -= 25
 		
 func damage(dmg:int):
 	currentHP -= dmg
@@ -102,12 +126,12 @@ func heal(hp:int):
 		currentHP += hp
 	else:
 		currentHP = maxHP
-	Global.makeFlyingTextLabel(global_position, str("+", hp), Color.GREEN, Global.LABEL_SIZE_SMALL)
+	Global.makeFlyingTextLabel(global_position, str("+", hp), Color.GREEN, Global.LABEL_SIZE_MEDIUM)
 		
 func refreshCurrentExpFromPlayerLevel():
-	for exp in expArray:
-		if exp.level == level:
-			currentExpLevel = exp
+	for xp in expArray:
+		if xp.level == level:
+			currentExpLevel = xp
 			return
 		
 func levelUp():
@@ -118,6 +142,16 @@ func levelUp():
 		maxHP = hp.maxValue
 		currentHP = maxHP
 		print("Level Up: ", level)
+		levelUpLabel.show()
+		var timer = Timer.new()
+		timer.wait_time = 2
+		timer.connect("timeout", _on_level_up_timer_timeout.bind(timer))
+		add_child(timer)
+		timer.start()
+		
+func _on_level_up_timer_timeout(timer:Timer):
+	levelUpLabel.hide()
+	timer.queue_free()
 		
 func calculateExp(expToGain:int):
 	print("Gained ", expToGain, " XP")
@@ -138,7 +172,7 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
 		if body.has_method("damage"):
-			body.call("damage", randi_range(currentExpLevel.attackDamage-5, currentExpLevel.attackDamage+5))
+			body.call("damage", randi_range(weapon.x, weapon.y))
 
 func _on_respawn_button_pressed() -> void:
 	global_position = startPosition
@@ -147,7 +181,9 @@ func _on_respawn_button_pressed() -> void:
 	hitbox.disabled = false
 	deathControl.hide()
 	get_tree().reload_current_scene()
-
-
-func _on_attack_timer_timeout() -> void:
-	canAttack = true
+	
+func _on_show_dialogue(text:String, left:SpriteFrames, right:SpriteFrames):
+	if text == "":
+		canMove = true
+	else:
+		canMove = false

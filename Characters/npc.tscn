@@ -1,0 +1,114 @@
+[gd_scene load_steps=13 format=3 uid="uid://bn4rh4f2e1b0x"]
+
+[ext_resource type="Script" uid="uid://dsdb82e5pr4lb" path="res://Scripts/npc.gd" id="1_32lk6"]
+[ext_resource type="Texture2D" uid="uid://by5a1ip7y1wlh" path="res://Resources/Blue Units/Monk/Idle.png" id="1_64dcp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32lk6"]
+atlas = ExtResource("1_64dcp")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ybb6"]
+atlas = ExtResource("1_64dcp")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ltij8"]
+atlas = ExtResource("1_64dcp")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qyjah"]
+atlas = ExtResource("1_64dcp")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y6vxo"]
+atlas = ExtResource("1_64dcp")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xrgdn"]
+atlas = ExtResource("1_64dcp")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mdcui"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32lk6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ybb6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ltij8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qyjah")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y6vxo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xrgdn")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xtqod"]
+radius = 8.0
+height = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_64dcp"]
+radius = 64.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_64dcp"]
+font_size = 32
+font_color = Color(0.881937, 0.881937, 0.881937, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="NPC" type="Node2D"]
+script = ExtResource("1_32lk6")
+configFileResource = "res://Files/npc_dialogue.cfg"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mdcui")
+animation = &"Idle"
+frame = 5
+frame_progress = 0.476637
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CapsuleShape2D_xtqod")
+disabled = true
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+affect_navigation_mesh = true
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="InteractionCollision" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_64dcp")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="InteractionLabel" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = -24.0
+offset_top = -80.0
+offset_right = 24.0
+offset_bottom = -35.0
+text = "E"
+label_settings = SubResource("LabelSettings_64dcp")
+horizontal_alignment = 1
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

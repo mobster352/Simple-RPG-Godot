@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxjs68coa705g"
-path="res://.godot/imported/fc265.png-028142e582e41e598c4bd74a33a24724.ctex"
+uid="uid://by5a1ip7y1wlh"
+path="res://.godot/imported/Idle.png-2c19fdb04d07886c210b6f4c7a628bbf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Raven_Fantasy_Icons/fc265.png"
-dest_files=["res://.godot/imported/fc265.png-028142e582e41e598c4bd74a33a24724.ctex"]
+source_file="res://Resources/Blue Units/Monk/Idle.png"
+dest_files=["res://.godot/imported/Idle.png-2c19fdb04d07886c210b6f4c7a628bbf.ctex"]
 
 [params]
 

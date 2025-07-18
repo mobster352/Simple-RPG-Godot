@@ -6,10 +6,7 @@ extends CharacterBody2D
 @onready var healthBar:ProgressBar = $Control/HealthBar
 @onready var attackHitbox = $AttackArea/AttackHitbox
 @onready var flyingTextNode = $FlyingTextNode
-
 @onready var navAgent:NavigationAgent2D = $NavigationAgent2D
-
-var potion
 
 enum states {
 	IDLE,
@@ -18,37 +15,39 @@ enum states {
 	RESET
 }
 
-var hp:int
-var speed:int
+@export var maxHp:int = 30
+@export var hp:int = maxHp
+@export var speed:int = 120
+@export var chaseDistance:int = 25
+@export var ATTACK_DAMAGE:int = 4
+@export var loot:PackedScene
 
 var startPosition:Vector2
 var canAttack:bool
 var atPlayer:bool
 var canMove:bool
 var inRange:bool
+var lootNode:Node
+var state = states.IDLE
+var player:CharacterBody2D
 
-const CHASE_DISTANCE:int = 25
 const MOVEMENT_OFFSET:int = 50
 const PLAYER_X_ALIGNMENT:float = 0.5
 const ATTACK_TIMER_SECS:float = 3.0
 const RESET_DISTANCE:float = 1000
-const ATTACK_DAMAGE:int = 4
-
-var state = states.IDLE
-var player:CharacterBody2D
 
 func _ready() -> void:
-	hp = 30
-	speed = 120
 	startPosition = global_position
 	canAttack = true
 	canMove = false
 	inRange = false
-	potion = preload("res://Objects/potion.tscn").instantiate()
+	lootNode = loot.instantiate()
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	playAnimation()
 	healthBar.value = hp
+	if hp < maxHp:
+		healthBar.show()
 	
 func _physics_process(delta: float) -> void:
 	move(delta)
@@ -93,7 +92,7 @@ func move(delta: float):
 			sprite.flip_h = true
 		else:
 			sprite.flip_h = false	
-		if distance < CHASE_DISTANCE && (direction.x > PLAYER_X_ALIGNMENT || direction.x < -PLAYER_X_ALIGNMENT):
+		if distance < chaseDistance && (direction.x > PLAYER_X_ALIGNMENT || direction.x < -PLAYER_X_ALIGNMENT):
 			state = states.IDLE
 			if direction.x > 0:
 				sprite.flip_h = true
@@ -113,7 +112,7 @@ func move(delta: float):
 				offset = -offset
 			var distance = position.distance_to(player.position + offset)
 		
-			if distance > CHASE_DISTANCE:
+			if distance > chaseDistance:
 				state = states.CHASE
 			else:
 				if direction.x > 0:
@@ -139,11 +138,13 @@ func damage(dmg:int):
 	Global.makeFlyingTextLabel(global_position, str(dmg), Color.RED, Global.LABEL_SIZE_BIG)
 	if hp <= 0:
 		#var randomSpawn = randi() % 4 + 1 # 25% chance to spawn
+		var textPos = Vector2(global_position.x + 50, global_position.y)
+		Global.makeFlyingTextLabel(textPos, str(75," XP"), Color.MEDIUM_PURPLE, Global.LABEL_SIZE_MEDIUM)
 		var randomSpawn = randi_range(1,4)
 		if randomSpawn > 2:
-			potion.position = position
+			lootNode.position = position
 			var parent = get_node("../")
-			parent.add_child(potion)
+			parent.add_child(lootNode)
 		if player:
 			if player.has_method("calculateExp"):
 				player.call("calculateExp", 75)

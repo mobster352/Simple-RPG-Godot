@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cxa5348c0w03t"]
+[gd_scene load_steps=33 format=3 uid="uid://cxa5348c0w03t"]
 
 [ext_resource type="Texture2D" uid="uid://cjb73ied6rmjw" path="res://Resources/Blue Units/Warrior/Warrior_Idle.png" id="1_6xdwp"]
 [ext_resource type="Script" uid="uid://ddsjmq6y2nhcr" path="res://Scripts/player.gd" id="1_j341n"]
@@ -167,6 +167,17 @@ font_color = Color(0.719454, 2.55093e-06, 5.77569e-07, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xf5fp"]
 bg_color = Color(0.0755004, 0.427178, 0.551769, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_osktb"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_osktb"]
+bg_color = Color(0, 0.631222, 0.178616, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xf5fp"]
+font_size = 32
+font_color = Color(1, 1, 0.258824, 1)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_as_relative = false
 y_sort_enabled = true
@@ -205,6 +216,19 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_bqsbk")
 rounded = true
 show_percentage = false
 script = ExtResource("5_xf5fp")
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/HealthBar"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
 
 [node name="DeathControl" type="Control" parent="CanvasLayer"]
 visible = false
@@ -264,9 +288,46 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_xf5fp")
 rounded = true
 show_percentage = false
 
+[node name="LevelLabel" type="Label" parent="CanvasLayer"]
+offset_left = 152.0
+offset_top = 624.0
+offset_right = 192.0
+offset_bottom = 647.0
+text = "Lv 99"
+label_settings = SubResource("LabelSettings_osktb")
+horizontal_alignment = 2
+
 [node name="FlyingTextNode" type="Node2D" parent="."]
+z_index = 1
 
 [node name="AttackTimer" type="Timer" parent="."]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StaminaBar" type="ProgressBar" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = -40.0
+offset_top = -64.0
+offset_right = 32.0
+offset_bottom = -56.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_osktb")
+value = 100.0
+show_percentage = false
+
+[node name="LevelUpLabel" type="Label" parent="Control/StaminaBar"]
+visible = false
+layout_mode = 0
+offset_left = -32.0
+offset_top = -48.0
+offset_right = 109.0
+offset_bottom = -3.0
+text = "Level Up!"
+label_settings = SubResource("LabelSettings_xf5fp")
 
 [connection signal="animation_finished" from="Sprite" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

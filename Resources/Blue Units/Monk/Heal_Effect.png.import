@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctk06y63gggd6"
-path="res://.godot/imported/fa265.png-7fd3d9745c2e8085028f5f77dcc9a21b.ctex"
+uid="uid://dqkyf8xtnporl"
+path="res://.godot/imported/Heal_Effect.png-240a86ec32474b7228f8598b126cd330.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Raven_Fantasy_Icons/fa265.png"
-dest_files=["res://.godot/imported/fa265.png-7fd3d9745c2e8085028f5f77dcc9a21b.ctex"]
+source_file="res://Resources/Blue Units/Monk/Heal_Effect.png"
+dest_files=["res://.godot/imported/Heal_Effect.png-240a86ec32474b7228f8598b126cd330.ctex"]
 
 [params]
 
