@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://x04n330778ot"]
 
-[ext_resource type="TileSet" uid="uid://bn6kht28tch3j" path="res://Resources/Maps/test_map2/tileset.tres" id="1_pqh0i"]
+[ext_resource type="TileSet" uid="uid://bn6kht28tch3j" path="res://Resources/Maps/test_map_updates/tileset.tres" id="1_pqh0i"]
 
 [node name="Ramp" type="TileMapLayer"]
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 7, 0, 8, 0, 0, 0)
