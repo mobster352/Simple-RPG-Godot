@@ -1,0 +1,89 @@
+[gd_scene load_steps=13 format=3 uid="uid://dpxqq0y3nup4y"]
+
+[ext_resource type="Texture2D" uid="uid://t3wubiurqb7y" path="res://Resources/Trees/Tree3.png" id="1_st6vb"]
+[ext_resource type="Script" uid="uid://cbmx3ryohvkuo" path="res://Scripts/tree.gd" id="2_xi5bq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xi5bq"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jm47t"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uomiw"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahpvq"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0evyh"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qaayi"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b1xdc"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxygy"]
+atlas = ExtResource("1_st6vb")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dni3x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xi5bq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jm47t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uomiw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahpvq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0evyh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qaayi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b1xdc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wxygy")
+}],
+"loop": true,
+"name": &"tree",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dytr8"]
+size = Vector2(16, 7)
+
+[node name="Tree3" type="Node2D"]
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, -48)
+sprite_frames = SubResource("SpriteFrames_dni3x")
+animation = &"tree"
+script = ExtResource("2_xi5bq")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite"]
+collision_layer = 4
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/StaticBody2D"]
+position = Vector2(0, 40)
+shape = SubResource("RectangleShape2D_dytr8")

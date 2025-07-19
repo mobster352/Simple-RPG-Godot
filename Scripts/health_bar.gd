@@ -11,26 +11,19 @@ var hpArray:Array
 var currentHp:Hp
 
 func _ready() -> void:
-	var config = ConfigFile.new()
-	var err = config.load("res://Files/health_levels.cfg")
-	if err != OK:
-		print("File did not load")
-		return
-	for level in config.get_sections():
+	var levelIndex = 1
+	while levelIndex < 99:
 		var hp = Hp.new()
-		hp.level = config.get_value(level, "level")
-		hp.size = config.get_value(level, "size")
-		hp.maxValue = config.get_value(level, "max_hp")
+		hp.level = levelIndex
+		hp.maxValue = floor(10 * pow(levelIndex, 0.5))
 		hpArray.append(hp)
+		levelIndex += 1
 	currentHp = hpArray.get(0)
-	
 	max_value = currentHp.maxValue
-	size.x = currentHp.size
 
 func _process(_delta: float) -> void:
 	if currentHp.level != player.level:
 		var hp = getHpFromPlayerLevel(player.level)
-		size.x = hp.size
 		max_value = hp.maxValue
 		currentHp = hp
 

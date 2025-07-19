@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+# Character Data (may make this a class)
 var level = 1
 var maxHP = 10
 var currentHP = maxHP
@@ -17,37 +18,30 @@ var weapon = Vector2(7,13)
 @onready var expBar = $CanvasLayer/ExpBar
 @onready var flyingTextNode = $FlyingTextNode
 @onready var staminaBar = $Control/StaminaBar
-@onready var levelLabel = $CanvasLayer/LevelLabel
+@onready var levelLabel = $CanvasLayer/ExpBar/LevelLabel
 @onready var levelUpLabel = $Control/StaminaBar/LevelUpLabel
 @onready var healthLabel = $CanvasLayer/HealthBar/HealthLabel
 
 var isAttacking = false
-var startPosition:Vector2
+var startGlobalPosition:Vector2
 var canMove:bool = true
-
-var textArray:Array = ["test test test"]
-var currentTextIndex:int = 0
 
 class ExpLevel:
 	var level:int
 	var expNextLevel:int
-	var attackDamage:int
 
 var expArray:Array
 var currentExpLevel:ExpLevel
 
 func _ready() -> void:
-	startPosition = global_position
-	var config = ConfigFile.new()
-	var err = config.load("res://Files/exp_levels.cfg")
-	if err != OK:
-		print("File did not load")
-		return
-	for level in config.get_sections():
+	startGlobalPosition = global_position
+	var levelIndex = 1
+	while levelIndex < 99:
 		var xp = ExpLevel.new()
-		xp.level = config.get_value(level, "level")
-		xp.expNextLevel = config.get_value(level, "exp")
+		xp.level = levelIndex
+		xp.expNextLevel = floor(100 * pow(levelIndex, 1.5))
 		expArray.append(xp)
+		levelIndex += 1
 	currentExpLevel = expArray.get(0)
 	expBar.max_value = currentExpLevel.expNextLevel
 	expBar.value = 0
@@ -60,20 +54,10 @@ func _process(delta: float) -> void:
 		stamina += 1 * 10 * delta
 	else:
 		staminaBar.hide()
-	healthLabel.text = str(currentHP)
+	healthLabel.text = str(currentHP, " / ", maxHP)
 	healthBar.value = currentHP
 	staminaBar.value = stamina
 	levelLabel.text = str("Lv ", level)
-	
-	#if Input.is_action_just_pressed("Use"):
-		#canMove = false
-		#if currentTextIndex >= textArray.size():
-			#Global.show_dialogue.emit("",null,null)
-			#currentTextIndex = 0
-			#canMove = true
-		#else:
-			#Global.show_dialogue.emit(textArray.get(currentTextIndex), sprite.sprite_frames, null)
-			#currentTextIndex += 1
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:
@@ -81,22 +65,17 @@ func _physics_process(_delta: float) -> void:
 
 func movePlayer():
 	if isAttacking:
-		return
-	velocity = Vector2.ZERO
-	if Input.is_action_pressed("MoveRight"):
-		velocity.x += speed
-		sprite.flip_h = false
-		if attackHitbox.position.x < 0:
+		return	
+	var input_vector = Vector2(
+		Input.get_action_strength("MoveRight") - Input.get_action_strength("MoveLeft"),
+		Input.get_action_strength("MoveDown") - Input.get_action_strength("MoveUp")
+	).normalized()
+	velocity = input_vector * speed
+	if input_vector.x != 0:
+		sprite.flip_h = input_vector.x < 0
+		var should_be_positive = input_vector.x > 0
+		if (should_be_positive and attackHitbox.position.x < 0) or (not should_be_positive and attackHitbox.position.x > 0):
 			attackHitbox.position.x *= -1
-	if Input.is_action_pressed("MoveLeft"):
-		velocity.x -= speed
-		sprite.flip_h = true
-		if attackHitbox.position.x > 0:
-			attackHitbox.position.x *= -1
-	if Input.is_action_pressed("MoveUp"):
-		velocity.y -= speed
-	if Input.is_action_pressed("MoveDown"):
-		velocity.y += speed
 	move_and_slide()
 	
 func playAnimations():
@@ -135,13 +114,14 @@ func refreshCurrentExpFromPlayerLevel():
 			return
 		
 func levelUp():
-	if level < 3:
+	if level < 100:
 		level += 1
 		refreshCurrentExpFromPlayerLevel()
 		var hp = healthBar.getHpFromPlayerLevel(level)
 		maxHP = hp.maxValue
 		currentHP = maxHP
 		print("Level Up: ", level)
+		#print("XP Next Level: ", currentExpLevel.expNextLevel)
 		levelUpLabel.show()
 		var timer = Timer.new()
 		timer.wait_time = 2
@@ -175,7 +155,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			body.call("damage", randi_range(weapon.x, weapon.y))
 
 func _on_respawn_button_pressed() -> void:
-	global_position = startPosition
+	global_position = startGlobalPosition
 	currentHP = maxHP
 	show()
 	hitbox.disabled = false

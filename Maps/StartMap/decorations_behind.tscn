@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dhfsxtkb2com"]
+[gd_scene load_steps=3 format=3 uid="uid://dhfsxtkb2com"]
 
 [ext_resource type="PackedScene" uid="uid://srfgwspo1ite" path="res://Objects/tree1.tscn" id="1_s0uww"]
+[ext_resource type="PackedScene" uid="uid://dpxqq0y3nup4y" path="res://Objects/tree3.tscn" id="2_xfyeu"]
 
 [node name="Decorations_Behind" type="Node2D"]
 
@@ -9,3 +10,9 @@ position = Vector2(864, 274)
 
 [node name="Tree2" parent="." instance=ExtResource("1_s0uww")]
 position = Vector2(800, 594)
+
+[node name="Tree3" parent="." instance=ExtResource("2_xfyeu")]
+position = Vector2(2076, 156)
+
+[node name="Tree4" parent="." instance=ExtResource("2_xfyeu")]
+position = Vector2(2207, 231)

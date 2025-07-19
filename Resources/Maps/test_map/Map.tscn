@@ -1,48 +1,79 @@
-[gd_scene load_steps=15 format=3 uid="uid://map"]
+[gd_scene load_steps=24 format=3 uid="uid://map"]
 
-[ext_resource type="PackedScene" uid="uid://dc47ho4ycppwt" path="res://Resources/Maps/test_map/Decorations_0.tscn" id="0_id"]
-[ext_resource type="PackedScene" uid="uid://bl87v0sarupsy" path="res://Resources/Maps/test_map/Buildings_1.tscn" id="1_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map2/Ground_5.tscn" id="1_kye8f"]
 [ext_resource type="PackedScene" uid="uid://ccoddx4ku6rmg" path="res://Objects/water_left_edge.tscn" id="1_yg8sa"]
-[ext_resource type="PackedScene" uid="uid://yfq1k6wh62nx" path="res://Resources/Maps/test_map/Decorations_Behind_2.tscn" id="2_id"]
+[ext_resource type="PackedScene" uid="uid://hdy7f0jodd4o" path="res://Resources/Maps/test_map2/Elevation_4.tscn" id="2_7tdan"]
 [ext_resource type="PackedScene" uid="uid://dm1onfuhlyi1a" path="res://Objects/water_mid.tscn" id="2_xcq1l"]
-[ext_resource type="PackedScene" uid="uid://c16a5fgmfguyi" path="res://Resources/Maps/test_map/Ground_3.tscn" id="3_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map2/Decorations_Behind_3.tscn" id="3_qkanf"]
 [ext_resource type="PackedScene" uid="uid://cmfk10i1wag1v" path="res://Objects/water_right_edge.tscn" id="3_u6njl"]
 [ext_resource type="PackedScene" uid="uid://dhfsxtkb2com" path="res://Maps/StartMap/decorations_behind.tscn" id="3_xcq1l"]
 [ext_resource type="PackedScene" uid="uid://c1nyetag5rc4c" path="res://Maps/StartMap/decorations.tscn" id="3_yj3pe"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map2/Behind2_2.tscn" id="4_5mj2u"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map2/Buildings_1.tscn" id="5_t50tc"]
+[ext_resource type="PackedScene" uid="uid://b7mwd47sb4pmb" path="res://Maps/StartMap/decorations_behind2.tscn" id="6_7tdan"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map2/Decorations_0.tscn" id="6_lskri"]
 [ext_resource type="PackedScene" uid="uid://b0uc2enei2iqr" path="res://Maps/StartMap/buildings.tscn" id="6_wq3im"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yj3pe"]
-size = Vector2(1848, 6)
+size = Vector2(2552, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yg8sa"]
 size = Vector2(10, 1088)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xcq1l"]
-size = Vector2(8, 1080)
+size = Vector2(16, 440)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u6njl"]
 size = Vector2(1856, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7tdan"]
+size = Vector2(8, 704)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qkanf"]
+size = Vector2(688, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5mj2u"]
+size = Vector2(8, 312)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t50tc"]
+size = Vector2(504, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lskri"]
+size = Vector2(8, 248)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_03o8d"]
+size = Vector2(512, 56)
 
 [node name="map" type="Node2D"]
 z_as_relative = false
 y_sort_enabled = true
 
-[node name="Ground_3" parent="." instance=ExtResource("3_id")]
+[node name="Ground_5" parent="." instance=ExtResource("1_kye8f")]
 
-[node name="Decorations_Behind_2" parent="." instance=ExtResource("2_id")]
+[node name="Elevation_4" parent="." instance=ExtResource("2_7tdan")]
+
+[node name="Decorations_Behind_3" parent="." instance=ExtResource("3_qkanf")]
 visible = false
 
 [node name="Decorations_Behind" parent="." instance=ExtResource("3_xcq1l")]
+z_as_relative = false
 y_sort_enabled = true
 
-[node name="Buildings_1" parent="." instance=ExtResource("1_id")]
+[node name="Behind2_2" parent="." instance=ExtResource("4_5mj2u")]
+visible = false
+
+[node name="Decorations_Behind2" parent="." instance=ExtResource("6_7tdan")]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="Buildings_2" parent="." instance=ExtResource("5_t50tc")]
 visible = false
 
 [node name="Buildings" parent="." instance=ExtResource("6_wq3im")]
 z_as_relative = false
 y_sort_enabled = true
 
-[node name="Decorations_0" parent="." instance=ExtResource("0_id")]
+[node name="Decorations_1" parent="." instance=ExtResource("6_lskri")]
 visible = false
 
 [node name="Decorations" parent="." instance=ExtResource("3_yj3pe")]
@@ -141,7 +172,7 @@ position = Vector2(1824, 1120)
 [node name="WorldBounds" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds"]
-position = Vector2(924, 3)
+position = Vector2(1276, 3)
 shape = SubResource("RectangleShape2D_yj3pe")
 one_way_collision_margin = 0.0
 
@@ -150,9 +181,37 @@ position = Vector2(-5, 544)
 shape = SubResource("RectangleShape2D_yg8sa")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="WorldBounds"]
-position = Vector2(1852, 540)
+position = Vector2(1856, 860)
 shape = SubResource("RectangleShape2D_xcq1l")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="WorldBounds"]
 position = Vector2(928, 1084)
 shape = SubResource("RectangleShape2D_u6njl")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2556, 352)
+shape = SubResource("RectangleShape2D_7tdan")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2556, 352)
+shape = SubResource("RectangleShape2D_7tdan")
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2208, 700)
+shape = SubResource("RectangleShape2D_qkanf")
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(1860, 220)
+shape = SubResource("RectangleShape2D_5mj2u")
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2116, 68)
+shape = SubResource("RectangleShape2D_t50tc")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2364, 196)
+shape = SubResource("RectangleShape2D_lskri")
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(2112, 404)
+shape = SubResource("RectangleShape2D_03o8d")

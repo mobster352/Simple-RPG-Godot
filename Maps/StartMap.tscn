@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ikjkfcqd13gp"]
+[gd_scene load_steps=10 format=3 uid="uid://ikjkfcqd13gp"]
 
 [ext_resource type="Texture2D" uid="uid://b3bh23wtrn6uj" path="res://Resources/Water/Water Background color.png" id="1_10cxu"]
 [ext_resource type="PackedScene" uid="uid://cxa5348c0w03t" path="res://Characters/Player/player.tscn" id="1_fl2so"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ca7ujnyah2h3n" path="res://Objects/dialogue_box.tscn" id="2_cfn04"]
 [ext_resource type="PackedScene" uid="uid://3ol70s61sd67" path="res://Characters/enemy.tscn" id="4_4ag65"]
 [ext_resource type="PackedScene" uid="uid://imah6d0dklcj" path="res://Objects/potion.tscn" id="5_jdd5n"]
+[ext_resource type="PackedScene" uid="uid://dne7uncb5815b" path="res://Objects/enemy_spawner.tscn" id="5_udol0"]
 [ext_resource type="PackedScene" uid="uid://bn4rh4f2e1b0x" path="res://Characters/npc.tscn" id="7_aaqyu"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_4ag65"]
@@ -85,12 +86,15 @@ scale = Vector2(1.5, 1.5)
 
 [node name="Player" parent="YSort" instance=ExtResource("1_fl2so")]
 unique_name_in_owner = true
-position = Vector2(-23, -787.5)
+position = Vector2(1773, -957.5)
 
-[node name="Enemy" parent="YSort" instance=ExtResource("4_4ag65")]
-position = Vector2(631, -543.5)
+[node name="EnemySpawner" parent="YSort" instance=ExtResource("5_udol0")]
+y_sort_enabled = true
 
-[node name="Enemy2" parent="YSort" instance=ExtResource("4_4ag65")]
+[node name="Enemy" parent="YSort/EnemySpawner" instance=ExtResource("4_4ag65")]
+position = Vector2(749, -549.5)
+
+[node name="Enemy2" parent="YSort/EnemySpawner" instance=ExtResource("4_4ag65")]
 position = Vector2(312, -268.5)
 
 [node name="NPC" parent="YSort" instance=ExtResource("7_aaqyu")]

@@ -182,6 +182,7 @@ font_color = Color(1, 1, 0.258824, 1)
 z_as_relative = false
 y_sort_enabled = true
 collision_mask = 5
+motion_mode = 1
 script = ExtResource("1_j341n")
 speed = 200
 
@@ -209,7 +210,7 @@ disabled = true
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer"]
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 108.0
+offset_right = 192.0
 offset_bottom = 35.0
 size_flags_horizontal = 3
 theme_override_styles/fill = SubResource("StyleBoxFlat_bqsbk")
@@ -288,11 +289,12 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_xf5fp")
 rounded = true
 show_percentage = false
 
-[node name="LevelLabel" type="Label" parent="CanvasLayer"]
-offset_left = 152.0
-offset_top = 624.0
-offset_right = 192.0
-offset_bottom = 647.0
+[node name="LevelLabel" type="Label" parent="CanvasLayer/ExpBar"]
+layout_mode = 0
+offset_left = -48.0
+offset_top = -8.0
+offset_right = -8.0
+offset_bottom = 15.0
 text = "Lv 99"
 label_settings = SubResource("LabelSettings_osktb")
 horizontal_alignment = 2

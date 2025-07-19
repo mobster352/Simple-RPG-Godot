@@ -2,6 +2,7 @@ extends Node
 
 signal show_dialogue
 signal increment_dialogue
+signal enemy_died
 
 const LABEL_SPEED = 5
 const LABEL_SIZE_SMALL = 20

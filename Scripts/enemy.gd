@@ -22,6 +22,7 @@ enum states {
 @export var ATTACK_DAMAGE:int = 4
 @export var loot:PackedScene
 
+var startGlobalPosition:Vector2
 var startPosition:Vector2
 var canAttack:bool
 var atPlayer:bool
@@ -35,9 +36,11 @@ const MOVEMENT_OFFSET:int = 50
 const PLAYER_X_ALIGNMENT:float = 0.5
 const ATTACK_TIMER_SECS:float = 3.0
 const RESET_DISTANCE:float = 1000
+const EXP_RECEIVED:int = 15
 
 func _ready() -> void:
-	startPosition = global_position
+	startGlobalPosition = global_position
+	startPosition = position
 	canAttack = true
 	canMove = false
 	inRange = false
@@ -65,11 +68,11 @@ func playAnimation():
 		sprite.play("Idle")
 	
 func move(delta: float):
-	if global_position.distance_to(startPosition) > RESET_DISTANCE:
+	if global_position.distance_to(startGlobalPosition) > RESET_DISTANCE:
 		state = states.RESET
 		
 	if state == states.RESET:
-		navAgent.target_position = startPosition
+		navAgent.target_position = startGlobalPosition
 		var direction = global_position.direction_to(navAgent.get_next_path_position())
 		navAgent.velocity = direction * speed * delta
 		if direction.x < 0:
@@ -139,7 +142,7 @@ func damage(dmg:int):
 	if hp <= 0:
 		#var randomSpawn = randi() % 4 + 1 # 25% chance to spawn
 		var textPos = Vector2(global_position.x + 50, global_position.y)
-		Global.makeFlyingTextLabel(textPos, str(75," XP"), Color.MEDIUM_PURPLE, Global.LABEL_SIZE_MEDIUM)
+		Global.makeFlyingTextLabel(textPos, str(EXP_RECEIVED," XP"), Color.MEDIUM_PURPLE, Global.LABEL_SIZE_MEDIUM)
 		var randomSpawn = randi_range(1,4)
 		if randomSpawn > 2:
 			lootNode.position = position
@@ -147,7 +150,8 @@ func damage(dmg:int):
 			parent.add_child(lootNode)
 		if player:
 			if player.has_method("calculateExp"):
-				player.call("calculateExp", 75)
+				player.call("calculateExp", EXP_RECEIVED)
+		Global.enemy_died.emit(startPosition)
 		queue_free()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:

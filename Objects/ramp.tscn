@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://x04n330778ot"]
+
+[ext_resource type="TileSet" uid="uid://bn6kht28tch3j" path="res://Resources/Maps/test_map2/tileset.tres" id="1_pqh0i"]
+
+[node name="Ramp" type="TileMapLayer"]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 7, 0, 8, 0, 0, 0)
+tile_set = ExtResource("1_pqh0i")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(-2360, -312)
+polygon = PackedVector2Array(2360, 368, 2416, 424, 2360, 424)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="StaticBody2D"]
+position = Vector2(-2360, -432)
+polygon = PackedVector2Array(2392, 464, 2416, 488, 2360, 432)
