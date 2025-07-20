@@ -1,0 +1,25 @@
+[gd_scene load_steps=7 format=3 uid="uid://pj608ccog5vu"]
+
+[ext_resource type="PackedScene" path="res://Resources/Maps/main_menu_map/Ground_3.tscn" id="1_5geig"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/main_menu_map/Buildings_2.tscn" id="2_k7eh4"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/main_menu_map/Buildings2_1.tscn" id="3_gb7ss"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/main_menu_map/Units_0.tscn" id="4_4131p"]
+[ext_resource type="PackedScene" uid="uid://de7ynu4erch0r" path="res://Objects/blue_warrior.tscn" id="5_k7eh4"]
+[ext_resource type="PackedScene" uid="uid://dj81lauab7271" path="res://Objects/red_warrior.tscn" id="6_gb7ss"]
+
+[node name="MainMenuMap" type="Node2D"]
+
+[node name="Ground_3" parent="." instance=ExtResource("1_5geig")]
+
+[node name="Buildings_2" parent="." instance=ExtResource("2_k7eh4")]
+
+[node name="Buildings2_1" parent="." instance=ExtResource("3_gb7ss")]
+
+[node name="Units_0" parent="." instance=ExtResource("4_4131p")]
+visible = false
+
+[node name="BlueWarrior" parent="." instance=ExtResource("5_k7eh4")]
+position = Vector2(480, 352)
+
+[node name="RedWarrior" parent="." instance=ExtResource("6_gb7ss")]
+position = Vector2(736, 352)

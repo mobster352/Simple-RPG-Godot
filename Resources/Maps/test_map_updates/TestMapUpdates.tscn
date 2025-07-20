@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://polgp04xu0fd"]
+
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_updates/Decorations_0.tscn" id="0_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_updates/Buildings_1.tscn" id="1_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_updates/Behind2_2.tscn" id="2_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_updates/Decorations_Behind_3.tscn" id="3_id"]
+[ext_resource type="PackedScene" uid="uid://hdy7f0jodd4o" path="res://Resources/Maps/test_map_updates/Elevation_4.tscn" id="4_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_updates/Ground_5.tscn" id="5_id"]
+
+[node name="TestUpdatesMap" type="Node2D"]
+
+[node name="Ground_5" parent="." instance=ExtResource("5_id")]
+
+[node name="Elevation_4" parent="." instance=ExtResource("4_id")]
+
+[node name="Decorations_Behind_3" parent="." instance=ExtResource("3_id")]
+
+[node name="Behind2_2" parent="." instance=ExtResource("2_id")]
+
+[node name="Buildings_1" parent="." instance=ExtResource("1_id")]
+
+[node name="Decorations_0" parent="." instance=ExtResource("0_id")]
+

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://map"]
+[gd_scene format=3 uid="uid://jdtyu478m5dc"]
 
 [ext_resource type="PackedScene" path="res://Resources/Maps/map/Decorations_0.tscn" id="0_id"]
 [ext_resource type="PackedScene" path="res://Resources/Maps/map/Buildings_1.tscn" id="1_id"]

@@ -2,8 +2,8 @@ extends Node2D
 
 @onready var canvasLayer = $CanvasLayer
 @onready var dialogue:Label = $CanvasLayer/Background/Dialogue
-@onready var leftSprite:AnimatedSprite2D = $CanvasLayer/LeftSprite
-@onready var rightSprite:AnimatedSprite2D = $CanvasLayer/RightSprite
+@onready var leftSprite:AnimatedSprite2D = $CanvasLayer/MarginContainer/LeftSprite
+@onready var rightSprite:AnimatedSprite2D = $CanvasLayer/MarginContainer/RightSprite
 
 var tween
 

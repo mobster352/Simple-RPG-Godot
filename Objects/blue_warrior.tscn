@@ -1,0 +1,75 @@
+[gd_scene load_steps=12 format=3 uid="uid://de7ynu4erch0r"]
+
+[ext_resource type="Script" uid="uid://306dyds5py6b" path="res://Scripts/blue_warrior.gd" id="1_bhfyk"]
+[ext_resource type="Texture2D" uid="uid://cjb73ied6rmjw" path="res://Resources/Blue Units/Warrior/Warrior_Idle.png" id="1_c1eev"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhfyk"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71x8v"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lcn0c"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qvnrx"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r0k4q"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hx2qq"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0x62"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q0qsi"]
+atlas = ExtResource("1_c1eev")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hiwqs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhfyk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71x8v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lcn0c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qvnrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r0k4q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hx2qq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0x62")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q0qsi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="BlueWarrior" type="Node2D"]
+script = ExtResource("1_bhfyk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hiwqs")
+frame_progress = 0.595865

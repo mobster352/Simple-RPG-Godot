@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://map"]
+[gd_scene load_steps=24 format=3 uid="uid://clvbyof4elgn7"]
 
 [ext_resource type="PackedScene" path="res://Resources/Maps/test_map_updates/Ground_5.tscn" id="1_kye8f"]
 [ext_resource type="PackedScene" uid="uid://ccoddx4ku6rmg" path="res://Objects/water_left_edge.tscn" id="1_yg8sa"]
@@ -44,9 +44,7 @@ size = Vector2(8, 248)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_03o8d"]
 size = Vector2(512, 56)
 
-[node name="map" type="Node2D"]
-z_as_relative = false
-y_sort_enabled = true
+[node name="StartMap" type="Node2D"]
 
 [node name="Ground_5" parent="." instance=ExtResource("1_kye8f")]
 

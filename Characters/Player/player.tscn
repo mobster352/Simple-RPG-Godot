@@ -187,7 +187,7 @@ script = ExtResource("1_j341n")
 speed = 200
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.75, 0.75)
+zoom = Vector2(0.7, 0.7)
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_va6lm")
