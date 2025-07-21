@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://bn4rh4f2e1b0x"]
+[gd_scene load_steps=14 format=3 uid="uid://bn4rh4f2e1b0x"]
 
 [ext_resource type="Script" uid="uid://dsdb82e5pr4lb" path="res://Scripts/npc.gd" id="1_32lk6"]
 [ext_resource type="Texture2D" uid="uid://by5a1ip7y1wlh" path="res://Resources/Blue Units/Monk/Idle.png" id="1_64dcp"]
+[ext_resource type="Texture2D" uid="uid://bqo3vkcc8mvtm" path="res://Resources/Raven_Fantasy_Icons/fb43.png" id="3_6ybb6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_32lk6"]
 atlas = ExtResource("1_64dcp")
@@ -75,6 +76,11 @@ sprite_frames = SubResource("SpriteFrames_mdcui")
 animation = &"Idle"
 frame = 5
 frame_progress = 0.476637
+
+[node name="QuestSprite" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -56)
+texture = ExtResource("3_6ybb6")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 visible = false

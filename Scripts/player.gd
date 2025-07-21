@@ -12,7 +12,7 @@ var weapon = Vector2(7,13)
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var attackHitbox = $Area2D/AttackHitbox
-@onready var hitbox = $Hitbox
+@onready var hitbox = $HitboxArea/Hitbox
 @onready var healthBar = $CanvasLayer/HealthBar
 @onready var deathControl = $CanvasLayer/DeathControl
 @onready var expBar = $CanvasLayer/ExpBar
@@ -21,6 +21,8 @@ var weapon = Vector2(7,13)
 @onready var levelLabel = $CanvasLayer/ExpBar/LevelLabel
 @onready var levelUpLabel = $Control/StaminaBar/LevelUpLabel
 @onready var healthLabel = $CanvasLayer/HealthBar/HealthLabel
+@onready var questLogControl = $CanvasLayer/QuestLog
+@onready var questsVBox = $CanvasLayer/QuestLog/MarginContainer/Quests
 
 var isAttacking = false
 var startGlobalPosition:Vector2
@@ -32,6 +34,13 @@ class ExpLevel:
 
 var expArray:Array
 var currentExpLevel:ExpLevel
+
+class QuestLog:
+	var questId:int
+	var questName:String
+	var questType: int
+	
+var showQuestLog = false
 
 func _ready() -> void:
 	startGlobalPosition = global_position
@@ -46,6 +55,7 @@ func _ready() -> void:
 	expBar.max_value = currentExpLevel.expNextLevel
 	expBar.value = 0
 	Global.show_dialogue.connect(_on_show_dialogue)
+	Global.add_quest.connect(_on_add_quest)
 
 func _process(delta: float) -> void:
 	playAnimations()
@@ -58,6 +68,14 @@ func _process(delta: float) -> void:
 	healthBar.value = currentHP
 	staminaBar.value = stamina
 	levelLabel.text = str("Lv ", level)
+	
+	if Input.is_action_just_pressed("QuestLog"):
+		if showQuestLog:
+			questLogControl.hide()
+			showQuestLog = false
+		else:
+			questLogControl.show()
+			showQuestLog = true
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:
@@ -167,3 +185,84 @@ func _on_show_dialogue(text:String, left:SpriteFrames, right:SpriteFrames):
 		canMove = true
 	else:
 		canMove = false
+		
+func _on_add_quest(questId:int):
+	var quest = questLogControl.findQuest(questId)
+	var questLabelName = Label.new()
+	questLabelName.set_meta("questId", quest.questId)
+	questLabelName.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT	
+	var questLabelValue = RichTextLabel.new()
+	questLabelValue.bbcode_enabled = true
+	questLabelValue.fit_content = true
+	questLabelValue.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	questLabelValue.set_anchors_preset(Control.PRESET_FULL_RECT)
+	if quest.questType == Global.QuestType.KILL:
+		questLabelName.text = str(quest.questName)
+		questLabelValue.text = str("[b] ", quest.numCompleted, "/", quest.numRequired, "[/b]")
+	elif quest.questType == Global.QuestType.TALK:
+		questLabelName.text = quest.questName
+	questLabelName.add_child(questLabelValue)
+	var colorRect = ColorRect.new()
+	colorRect.color = Color.CORAL
+	colorRect.color.a = 0.5
+	colorRect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	questLabelName.add_child(colorRect)
+	questsVBox.add_child(questLabelName)
+	questLogControl.activeQuests.append(quest)
+
+func isOnQuest(questId:int):
+	if questLogControl.isQuestActive(questId):# || questLogControl.isQuestCompleted(questId):
+		return true
+	return false
+	
+func incrementQuestNum(questId:int):
+	var quest = questLogControl.findQuest(questId)
+	if quest.numCompleted < quest.numRequired:
+		quest.numCompleted += 1
+	if quest.numCompleted >= quest.numRequired:
+		quest.readyToBeTurnedIn = true
+		var questNode = getQuestNodeByQuestId(questId)
+		for child in questNode.get_children():
+			if child is ColorRect:
+				child = child as ColorRect
+				child.color = Color.GREEN
+				child.color.a = 0.5
+	drawQuest(questId)
+		
+func drawQuest(questId:int):
+	var quest = questLogControl.findQuest(questId)
+	var questNode = getQuestNodeByQuestId(questId)
+	if questNode != null:
+		var childNode = questNode.get_child(0) as RichTextLabel
+		if childNode != null:
+			childNode.text = str("[b] ", quest.numCompleted, "/", quest.numRequired, "[/b]")
+
+func getQuestNodeByQuestId(questId:int):
+	for node in questsVBox.get_children():
+		if node.has_meta("questId"):
+			if node.get_meta("questId") == questId:
+				return node
+	return null
+
+func tryToCompleteQuest(questId:int):
+	var readyToComplete = questLogControl.isQuestReadyToComplete(questId)
+	if readyToComplete:
+		var questNode = getQuestNodeByQuestId(questId)
+		if questNode:
+			questNode.queue_free()
+		var removedQuest = questLogControl.removeFromActiveQuests(questId)
+		questLogControl.completedQuests.append(removedQuest)
+		calculateExp(removedQuest.expReward)
+		Global.makeFlyingTextLabel(global_position, str(removedQuest.expReward," XP"), Color.MEDIUM_PURPLE, Global.LABEL_SIZE_MEDIUM)
+		return true
+	return false
+	
+func markQuestReadyToTurnIn(questId:int):
+	var quest = questLogControl.findQuest(questId)
+	quest.readyToBeTurnedIn = true
+	var questNode = getQuestNodeByQuestId(questId)
+	for child in questNode.get_children():
+		if child is ColorRect:
+			child = child as ColorRect
+			child.color = Color.GREEN
+			child.color.a = 0.5

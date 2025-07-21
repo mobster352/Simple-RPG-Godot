@@ -38,6 +38,8 @@ const ATTACK_TIMER_SECS:float = 3.0
 const RESET_DISTANCE:float = 1000
 const EXP_RECEIVED:int = 15
 
+var questId:int = 1
+
 func _ready() -> void:
 	startGlobalPosition = global_position
 	startPosition = position
@@ -147,10 +149,15 @@ func damage(dmg:int):
 		if randomSpawn > 2:
 			lootNode.position = position
 			var parent = get_node("../")
-			parent.add_child(lootNode)
+			parent.call_deferred("add_child", lootNode)
 		if player:
 			if player.has_method("calculateExp"):
 				player.call("calculateExp", EXP_RECEIVED)
+			if player.has_method("isOnQuest"):
+				var isOnQuest = player.call("isOnQuest", questId)
+				if isOnQuest:
+					if player.has_method("incrementQuestNum"):
+						player.call("incrementQuestNum", questId)
 		Global.enemy_died.emit(startPosition)
 		queue_free()
 

@@ -97,7 +97,7 @@ scale = Vector2(1.5, 1.5)
 
 [node name="Player" parent="GameState/YSort" instance=ExtResource("1_fl2so")]
 unique_name_in_owner = true
-position = Vector2(1749, -957.5)
+position = Vector2(-467, -765.5)
 
 [node name="EnemySpawner" parent="GameState/YSort" instance=ExtResource("5_udol0")]
 y_sort_enabled = true
@@ -111,6 +111,23 @@ position = Vector2(312, -268.5)
 [node name="NPC" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
 y_sort_enabled = true
 position = Vector2(-280, -808.5)
+sections = PackedStringArray("npc", "npc_quest_started", "npc_after_quest")
+questId = 1
+questType = 1
+
+[node name="NPC_ChillGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
+y_sort_enabled = true
+position = Vector2(-971, -885.5)
+sections = PackedStringArray("npc_chill_guy")
+questId = 2
+isQuestTarget = true
+
+[node name="NPC_WorriedGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
+y_sort_enabled = true
+position = Vector2(-971, -661.5)
+sections = PackedStringArray("npc_worried_guy", "npc_worried_guy_quest_started", "npc_worried_guy_after_quest")
+questId = 2
+questType = 2
 
 [node name="Potion" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
 position = Vector2(-150, -768.5)
@@ -168,5 +185,4 @@ layout_mode = 2
 text = "Main Menu"
 
 [connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/ResumeButton" to="CanvasLayer" method="_on_resume_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/MainMenuButton" to="CanvasLayer" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/MainMenuButton" to="CanvasLayer" method="_on_main_menu_button_pressed"]

@@ -168,6 +168,8 @@ position = Vector2(1760, 1120)
 position = Vector2(1824, 1120)
 
 [node name="WorldBounds" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds"]
 position = Vector2(1276, 3)

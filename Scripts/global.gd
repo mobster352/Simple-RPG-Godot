@@ -3,11 +3,18 @@ extends Node
 signal show_dialogue
 signal increment_dialogue
 signal enemy_died
+signal add_quest
 
 const LABEL_SPEED = 5
 const LABEL_SIZE_SMALL = 20
 const LABEL_SIZE_MEDIUM = 25
 const LABEL_SIZE_BIG = 30
+
+enum QuestType {
+	NONE,
+	KILL,
+	TALK
+}
 
 var flyingTextNode:Node
 
