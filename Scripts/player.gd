@@ -188,25 +188,23 @@ func _on_show_dialogue(text:String, left:SpriteFrames, right:SpriteFrames):
 		
 func _on_add_quest(questId:int):
 	var quest = questLogControl.findQuest(questId)
-	var questLabelName = Label.new()
+	var questLabelName = RichTextLabel.new()
+	questLabelName.bbcode_enabled = true
 	questLabelName.set_meta("questId", quest.questId)
-	questLabelName.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT	
-	var questLabelValue = RichTextLabel.new()
-	questLabelValue.bbcode_enabled = true
-	questLabelValue.fit_content = true
-	questLabelValue.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	questLabelValue.set_anchors_preset(Control.PRESET_FULL_RECT)
+	#questLabelName.label_settings = LabelSettings.new()
+	#questLabelName.label_settings.font_size = 24
+	#questLabelName.label_settings.font_color = Color.TAN
+	#questLabelName.label_settings.outline_size = 5
+	#questLabelName.label_settings.outline_color = Color.BLACK
+	questLabelName.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	questLabelName.set_anchors_preset(Control.PRESET_FULL_RECT)
+	questLabelName.fit_content = true
 	if quest.questType == Global.QuestType.KILL:
-		questLabelName.text = str(quest.questName)
-		questLabelValue.text = str("[b] ", quest.numCompleted, "/", quest.numRequired, "[/b]")
+		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+		questLabelName.text += str("[outline_size=5]", quest.questName, " ", quest.numCompleted, "/", quest.numRequired, "[/outline_size]")
 	elif quest.questType == Global.QuestType.TALK:
-		questLabelName.text = quest.questName
-	questLabelName.add_child(questLabelValue)
-	var colorRect = ColorRect.new()
-	colorRect.color = Color.CORAL
-	colorRect.color.a = 0.5
-	colorRect.set_anchors_preset(Control.PRESET_FULL_RECT)
-	questLabelName.add_child(colorRect)
+		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+		questLabelName.text += str("[outline_size=5]", quest.questName, "[/outline_size]")
 	questsVBox.add_child(questLabelName)
 	questLogControl.activeQuests.append(quest)
 
@@ -221,21 +219,28 @@ func incrementQuestNum(questId:int):
 		quest.numCompleted += 1
 	if quest.numCompleted >= quest.numRequired:
 		quest.readyToBeTurnedIn = true
-		var questNode = getQuestNodeByQuestId(questId)
-		for child in questNode.get_children():
-			if child is ColorRect:
-				child = child as ColorRect
-				child.color = Color.GREEN
-				child.color.a = 0.5
+		#var questNode = getQuestNodeByQuestId(questId)
+		#for child in questNode.get_children():
+			#if child is ColorRect:
+				#child = child as ColorRect
+				#child.color = Color.GREEN
+				#child.color.a = 0.5
 	drawQuest(questId)
 		
 func drawQuest(questId:int):
 	var quest = questLogControl.findQuest(questId)
-	var questNode = getQuestNodeByQuestId(questId)
+	var questNode = getQuestNodeByQuestId(questId) as RichTextLabel
+	#if questNode != null:
+		#var childNode = questNode.get_child(0) as RichTextLabel
+		#if childNode != null:
+			#childNode.text = str("[b] ", quest.numCompleted, "/", quest.numRequired, "[/b]")
 	if questNode != null:
-		var childNode = questNode.get_child(0) as RichTextLabel
-		if childNode != null:
-			childNode.text = str("[b] ", quest.numCompleted, "/", quest.numRequired, "[/b]")
+		if quest.questType == Global.QuestType.KILL:
+			questNode.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+			questNode.text += str("[outline_size=5]", quest.questName, " ", quest.numCompleted, "/", quest.numRequired, "[/outline_size]")
+		elif quest.questType == Global.QuestType.TALK:
+			questNode.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+			questNode.text += str("[outline_size=5]", quest.questName, "[/outline_size]")
 
 func getQuestNodeByQuestId(questId:int):
 	for node in questsVBox.get_children():
@@ -260,9 +265,9 @@ func tryToCompleteQuest(questId:int):
 func markQuestReadyToTurnIn(questId:int):
 	var quest = questLogControl.findQuest(questId)
 	quest.readyToBeTurnedIn = true
-	var questNode = getQuestNodeByQuestId(questId)
-	for child in questNode.get_children():
-		if child is ColorRect:
-			child = child as ColorRect
-			child.color = Color.GREEN
-			child.color.a = 0.5
+	#var questNode = getQuestNodeByQuestId(questId)
+	#for child in questNode.get_children():
+		#if child is ColorRect:
+			#child = child as ColorRect
+			#child.color = Color.GREEN
+			#child.color.a = 0.5

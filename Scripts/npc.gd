@@ -27,7 +27,9 @@ enum QuestDialog {
 var inRange:bool = false
 var playerSprite:AnimatedSprite2D
 var player:CharacterBody2D
-#var questStartedSpriteResource:Resource
+var questStartedSpriteTexture:Texture2D
+var questInProgressSpriteTexture:Texture2D
+var questReadyToTurnInTexture:Texture2D
 
 class DialogueMap:
 	var character:String
@@ -68,7 +70,13 @@ func _ready() -> void:
 				dialogueMap = DialogueMap.new()
 		dialogueMapArrayList.append(dialogueMapArray)
 	dialogueMapIndex = 0
-	#questStartedSpriteResource = preload("res://Resources/Raven_Fantasy_Icons/fb13.png")
+	questStartedSpriteTexture = load("res://Resources/Raven_Fantasy_Icons/fb43.png")
+	questInProgressSpriteTexture = load("res://Resources/Raven_Fantasy_Icons/fb13.png")
+	questReadyToTurnInTexture = load("res://Resources/Raven_Fantasy_Icons/fb41.png")
+	if questType != Global.QuestType.NONE:
+		questSprite.texture = questStartedSpriteTexture
+		questSprite.show()
+	Global.quest_ready_to_turn_in.connect(_on_quest_ready_to_turn_in)
 
 func _process(_delta: float) -> void:
 	npcSprite.play("Idle")
@@ -84,6 +92,7 @@ func _process(_delta: float) -> void:
 			if isOnQuest && isFinishedPlaying:
 				if player.has_method("markQuestReadyToTurnIn"):
 					player.call("markQuestReadyToTurnIn", questId)
+					Global.quest_ready_to_turn_in.emit(questId)
 		else:
 			if isQuestComplete:
 				playDialogue(QuestDialog.AFTER_QUEST)
@@ -100,10 +109,14 @@ func _process(_delta: float) -> void:
 								isQuestComplete = player.call("tryToCompleteQuest", questId)
 								if isQuestComplete:
 									playDialogue(QuestDialog.AFTER_QUEST)
+									questSprite.hide()
 				else:
 					var isFinishedPlaying = playDialogue(QuestDialog.BEFORE_QUEST)
 					if isFinishedPlaying:
 						Global.add_quest.emit(questId)
+						if questType != Global.QuestType.NONE:
+							if questSprite.texture != questInProgressSpriteTexture:
+								questSprite.texture = questInProgressSpriteTexture
 
 func _on_area_2d_body_entered(_body: Node2D) -> void:
 	if _body.is_in_group("player"):
@@ -140,3 +153,7 @@ func playDialogue(arrayListIndex:int):
 		else:
 			print("no character")
 		return false #false when not done
+
+func _on_quest_ready_to_turn_in(questId:int):
+	if self.questId == questId:
+		questSprite.texture = questReadyToTurnInTexture
