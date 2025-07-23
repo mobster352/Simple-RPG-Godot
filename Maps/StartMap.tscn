@@ -99,14 +99,17 @@ scale = Vector2(1.5, 1.5)
 unique_name_in_owner = true
 position = Vector2(-467, -765.5)
 
-[node name="EnemySpawner" parent="GameState/YSort" instance=ExtResource("5_udol0")]
+[node name="EnemySpawner" parent="GameState/YSort" node_paths=PackedStringArray("player") instance=ExtResource("5_udol0")]
 y_sort_enabled = true
+player = NodePath("../Player")
 
-[node name="Enemy" parent="GameState/YSort/EnemySpawner" instance=ExtResource("4_4ag65")]
+[node name="Enemy" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
 position = Vector2(749, -549.5)
+player = NodePath("../../Player")
 
-[node name="Enemy2" parent="GameState/YSort/EnemySpawner" instance=ExtResource("4_4ag65")]
+[node name="Enemy2" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
 position = Vector2(312, -268.5)
+player = NodePath("../../Player")
 
 [node name="NPC" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
 y_sort_enabled = true

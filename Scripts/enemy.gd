@@ -7,6 +7,7 @@ extends CharacterBody2D
 @onready var attackHitbox = $AttackArea/AttackHitbox
 @onready var flyingTextNode = $FlyingTextNode
 @onready var navAgent:NavigationAgent2D = $NavigationAgent2D
+@onready var questSprite:Sprite2D = $QuestSprite
 
 enum states {
 	IDLE,
@@ -27,10 +28,12 @@ var startPosition:Vector2
 var canAttack:bool
 var atPlayer:bool
 var canMove:bool
+var inAttackRange:bool
 var inRange:bool
 var lootNode:Node
 var state = states.IDLE
-var player:CharacterBody2D
+
+@export var player:CharacterBody2D
 
 const MOVEMENT_OFFSET:int = 50
 const PLAYER_X_ALIGNMENT:float = 0.5
@@ -39,20 +42,25 @@ const RESET_DISTANCE:float = 1000
 const EXP_RECEIVED:int = 15
 
 var questId:int = 1
+var questTargetTexture:Texture2D
 
 func _ready() -> void:
 	startGlobalPosition = global_position
 	startPosition = position
 	canAttack = true
 	canMove = false
-	inRange = false
+	inAttackRange = false
 	lootNode = loot.instantiate()
+	questTargetTexture = load("res://Resources/Raven_Fantasy_Icons/fb12.png")
+	Global.add_quest.connect(_on_add_quest)
+	Global.quest_ready_to_turn_in.connect(_on_quest_ready_to_turn_in)
 	
 func _process(_delta: float) -> void:
 	playAnimation()
 	healthBar.value = hp
 	if hp < maxHp:
 		healthBar.show()
+	checkQuestTarget(questId)
 	
 func _physics_process(delta: float) -> void:
 	move(delta)
@@ -83,7 +91,7 @@ func move(delta: float):
 			sprite.flip_h = false
 		canMove = true
 	
-	elif state == states.CHASE:	
+	elif state == states.CHASE:
 		var offset = Vector2(MOVEMENT_OFFSET,0)
 		var direction = player.position.direction_to(position)
 		if direction.x < 0:
@@ -110,7 +118,7 @@ func move(delta: float):
 			canMove = true
 			
 	elif state == states.IDLE:
-		if player:
+		if player && inRange:
 			var offset = Vector2(MOVEMENT_OFFSET,0)
 			var direction = player.position.direction_to(position)
 			if direction.x < 0:
@@ -164,16 +172,16 @@ func damage(dmg:int):
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		state = states.CHASE
-		player = body as CharacterBody2D
+		inRange = true
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		player = null
 		state = states.RESET
+		inRange = false
 
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == "Attack":
-		if player && inRange:
+		if player && inAttackRange:
 			if player.has_method("damage"):
 				player.call("damage", ATTACK_DAMAGE)
 		attackHitbox.disabled = true
@@ -195,9 +203,30 @@ func _on_navigation_agent_2d_navigation_finished() -> void:
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		inRange = true
+		inAttackRange = true
 
 
 func _on_attack_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		inRange = false
+		inAttackRange = false
+		
+func _on_add_quest(questId:int):
+	if self.questId == questId:
+		checkQuestTarget(questId)
+					
+func checkQuestTarget(questId:int):
+	if player:
+		if player.has_method("isQuestReadyToComplete"):
+			if player.call("isQuestReadyToComplete", questId):
+				questSprite.texture = null
+				questSprite.hide()
+			elif player.has_method("isOnQuest"):
+				if player.call("isOnQuest", questId):
+					questSprite.texture = questTargetTexture
+					questSprite.show()
+				
+func _on_quest_ready_to_turn_in(questId:int):
+	if player:
+		if self.questId == questId:
+			if player.call("isOnQuest", questId):
+				questSprite.hide()

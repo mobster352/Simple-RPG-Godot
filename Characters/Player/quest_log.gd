@@ -3,6 +3,7 @@ extends Control
 class Quest:
 	var questId:int
 	var questName:String
+	var questDesc:String
 	var questType:int
 	var expReward:int
 	var numRequired:int
@@ -26,6 +27,7 @@ func _ready() -> void:
 		var keys = config.get_section_keys(q)
 		quest.questId = config.get_value(q, keys.get(keys.find("id")))
 		quest.questName = config.get_value(q, keys.get(keys.find("name")))
+		quest.questDesc = config.get_value(q, keys.get(keys.find("desc")))
 		quest.questType = config.get_value(q, keys.get(keys.find("type")))
 		quest.expReward = config.get_value(q, keys.get(keys.find("exp_reward")))
 		if quest.questType == Global.QuestType.KILL:

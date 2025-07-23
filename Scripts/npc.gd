@@ -43,6 +43,7 @@ var isQuestComplete:bool = false
 
 func _ready() -> void:
 	Global.increment_dialogue.connect(_on_increment_dialogue)
+	Global.add_quest.connect(_on_add_quest)
 	var node = preload("res://Characters/Player/player.tscn").instantiate()
 	playerSprite = node.get_node("Sprite") as AnimatedSprite2D
 	
@@ -92,7 +93,6 @@ func _process(_delta: float) -> void:
 			if isOnQuest && isFinishedPlaying:
 				if player.has_method("markQuestReadyToTurnIn"):
 					player.call("markQuestReadyToTurnIn", questId)
-					Global.quest_ready_to_turn_in.emit(questId)
 		else:
 			if isQuestComplete:
 				playDialogue(QuestDialog.AFTER_QUEST)
@@ -115,8 +115,7 @@ func _process(_delta: float) -> void:
 					if isFinishedPlaying:
 						Global.add_quest.emit(questId)
 						if questType != Global.QuestType.NONE:
-							if questSprite.texture != questInProgressSpriteTexture:
-								questSprite.texture = questInProgressSpriteTexture
+							questSprite.texture = null
 
 func _on_area_2d_body_entered(_body: Node2D) -> void:
 	if _body.is_in_group("player"):
@@ -156,4 +155,12 @@ func playDialogue(arrayListIndex:int):
 
 func _on_quest_ready_to_turn_in(questId:int):
 	if self.questId == questId:
-		questSprite.texture = questReadyToTurnInTexture
+		if isQuestTarget:
+			questSprite.hide()
+		else:
+			questSprite.texture = questReadyToTurnInTexture
+
+func _on_add_quest(questId:int):
+	if self.questId == questId && isQuestTarget:
+		questSprite.texture = questInProgressSpriteTexture
+		questSprite.show()
