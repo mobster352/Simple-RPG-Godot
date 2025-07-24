@@ -25,6 +25,7 @@ var weapon = Vector2(7,13)
 @onready var healthLabel = $CanvasLayer/HealthBar/HealthLabel
 @onready var questLogControl = $CanvasLayer/QuestLog
 @onready var questsVBox = $CanvasLayer/QuestLog/MarginContainer/Quests
+@onready var inventory = $CanvasLayer/Inventory
 
 var isAttacking = false
 var startGlobalPosition:Vector2
@@ -78,6 +79,11 @@ func _process(delta: float) -> void:
 		else:
 			questLogControl.show()
 			showQuestLog = true
+	if Input.is_action_just_pressed("Inventory"):
+		if inventory.visible:
+			inventory.hide()
+		else:
+			inventory.show()
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:

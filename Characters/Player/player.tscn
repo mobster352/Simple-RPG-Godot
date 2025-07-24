@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://cxa5348c0w03t"]
+[gd_scene load_steps=38 format=3 uid="uid://cxa5348c0w03t"]
 
 [ext_resource type="Texture2D" uid="uid://cjb73ied6rmjw" path="res://Resources/Blue Units/Warrior/Warrior_Idle.png" id="1_6xdwp"]
 [ext_resource type="Script" uid="uid://ddsjmq6y2nhcr" path="res://Scripts/player.gd" id="1_j341n"]
@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://bduk2i11dbgkn" path="res://Resources/Blue Units/Warrior/Warrior_Run.png" id="3_cue0d"]
 [ext_resource type="Script" uid="uid://dqld6hccodqpj" path="res://Scripts/health_bar.gd" id="5_xf5fp"]
 [ext_resource type="Script" uid="uid://dgxnvijrw8r2o" path="res://Characters/Player/quest_log.gd" id="6_osktb"]
+[ext_resource type="Texture2D" uid="uid://dqfnfsrebb4hw" path="res://Resources/RetroInventory/Inventory_Example_03.png" id="7_klx3t"]
+[ext_resource type="Script" uid="uid://dg67jtjvan2d6" path="res://Scripts/inventory.gd" id="7_r5ew0"]
+[ext_resource type="Texture2D" uid="uid://ynq8nrtsuhoq" path="res://Resources/RetroInventory/Inventory_9Slices.png" id="9_yhol4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5elsd"]
 atlas = ExtResource("2_bqsbk")
@@ -183,11 +186,6 @@ bg_color = Color(0.0755004, 0.427178, 0.551769, 1)
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_7vev3"]
-font_size = 24
-outline_size = 5
-outline_color = Color(0, 0, 0, 1)
-
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_as_relative = false
 y_sort_enabled = true
@@ -355,65 +353,206 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -152.0
+offset_left = -256.0
 offset_top = -132.0
-offset_right = 40.0
+offset_right = 75.0
 offset_bottom = 184.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.75, 0.75)
 script = ExtResource("6_osktb")
 
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/QuestLog"]
-visible = false
-layout_mode = 2
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/QuestLog"]
+layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.357202, 0.27437, 0.194194, 0.541176)
-
-[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/QuestLog"]
-visible = false
-layout_mode = 2
-offset_right = 192.0
-offset_bottom = 35.0
-
-[node name="ColorRect3" type="ColorRect" parent="CanvasLayer/QuestLog/MarginContainer2"]
-layout_mode = 2
-color = Color(0.259294, 0.259294, 0.259294, 0.541176)
-
-[node name="Label" type="Label" parent="CanvasLayer/QuestLog/MarginContainer2/ColorRect3"]
-layout_mode = 2
-offset_right = 192.0
-offset_bottom = 34.0
-text = "Quest Log"
-label_settings = SubResource("LabelSettings_7vev3")
-horizontal_alignment = 1
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/QuestLog/MarginContainer2/ColorRect3"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-bbcode_enabled = true
-text = "TESTTTTTTTTTT"
-scroll_active = false
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/QuestLog"]
-layout_mode = 2
-offset_top = 32.0
-offset_right = 192.0
-offset_bottom = 322.0
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
 
 [node name="Quests" type="VBoxContainer" parent="CanvasLayer/QuestLog/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
+[node name="Inventory" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 152.0
+offset_top = -132.0
+offset_right = 192.0
+offset_bottom = -92.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_r5ew0")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Inventory"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(2, 2)
+texture = ExtResource("7_klx3t")
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Inventory"]
+layout_mode = 2
+offset_left = 17.0
+offset_top = 18.0
+offset_right = 145.0
+offset_bottom = 176.0
+theme_override_constants/h_separation = 46
+theme_override_constants/v_separation = 46
+columns = 3
+
+[node name="InventorySlot1" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot1"]
+visible = false
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot1"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot2" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot2"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot2"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot3" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot3"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot3"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot4" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot4"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot4"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot5" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot5"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot5"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot6" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot6"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot6"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot7" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot7"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot7"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot8" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot8"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot8"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="InventorySlot9" type="Control" parent="CanvasLayer/Inventory/GridContainer"]
+layout_mode = 2
+
+[node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot9"]
+visible = false
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("9_yhol4")
+
+[node name="Item" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot9"]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+
 [connection signal="animation_finished" from="Sprite" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="pressed" from="CanvasLayer/DeathControl/RespawnButton" to="." method="_on_respawn_button_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_1_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_1_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_2_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_2_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_3_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_3_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_4_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_4_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_5_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_5_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_6_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_6_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_7_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_7_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_8_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_8_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_9_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_9_mouse_exited"]
