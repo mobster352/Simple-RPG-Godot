@@ -5,6 +5,8 @@ signal increment_dialogue
 signal enemy_died
 signal add_quest
 signal quest_ready_to_turn_in
+signal item_pickup
+signal heal
 
 const LABEL_SPEED = 5
 const LABEL_SIZE_SMALL = 20

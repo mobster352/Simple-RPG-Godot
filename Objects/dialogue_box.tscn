@@ -142,21 +142,37 @@ script = ExtResource("1_4d7rg")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
 
-[node name="Background" type="ColorRect" parent="CanvasLayer"]
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -376.0
+offset_top = 132.0
+offset_right = -336.0
+offset_bottom = 172.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+
+[node name="Background" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -496.0
-offset_top = -200.0
-offset_right = 504.0
-offset_bottom = -40.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 980.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 0
 color = Color(0, 0, 0, 0.235294)
 
-[node name="Dialogue" type="Label" parent="CanvasLayer/Background"]
+[node name="Dialogue" type="Label" parent="CanvasLayer/Control/Background"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -174,24 +190,25 @@ autowrap_mode = 3
 visible_characters = 0
 visible_ratio = 0.0
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -416.0
-offset_top = -120.0
-offset_right = -376.0
-offset_bottom = -80.0
+offset_left = 60.0
+offset_top = 40.0
+offset_right = 100.0
+offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="LeftSprite" type="AnimatedSprite2D" parent="CanvasLayer/MarginContainer"]
+[node name="LeftSprite" type="AnimatedSprite2D" parent="CanvasLayer/Control/MarginContainer"]
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_16n4w")
 
-[node name="RightSprite" type="AnimatedSprite2D" parent="CanvasLayer/MarginContainer"]
+[node name="RightSprite" type="AnimatedSprite2D" parent="CanvasLayer/Control/MarginContainer"]
 position = Vector2(832, 0)
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_xhsnc")

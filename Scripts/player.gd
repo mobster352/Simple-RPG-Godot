@@ -59,6 +59,7 @@ func _ready() -> void:
 	expBar.value = 0
 	Global.show_dialogue.connect(_on_show_dialogue)
 	Global.add_quest.connect(_on_add_quest)
+	Global.heal.connect(_on_heal)
 
 func _process(delta: float) -> void:
 	playAnimations()
@@ -160,7 +161,7 @@ func _on_level_up_timer_timeout(timer:Timer):
 	timer.queue_free()
 		
 func calculateExp(expToGain:int):
-	print("Gained ", expToGain, " XP")
+	#print("Gained ", expToGain, " XP")
 	var newExp = currentExp + expToGain
 	if newExp >= currentExpLevel.expNextLevel:
 		levelUp()
@@ -271,3 +272,6 @@ func markQuestReadyToTurnIn(questId:int):
 	quest.readyToBeTurnedIn = true
 	drawQuest(questId, quest.readyToBeTurnedIn)
 	Global.quest_ready_to_turn_in.emit(questId)
+
+func _on_heal(hp:int):
+	heal(hp)

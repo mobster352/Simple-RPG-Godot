@@ -382,10 +382,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 152.0
-offset_top = -132.0
-offset_right = 192.0
-offset_bottom = -92.0
+offset_left = 408.0
+offset_top = 156.0
+offset_right = 448.0
+offset_bottom = 196.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("7_r5ew0")
@@ -427,6 +427,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot2"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -441,6 +442,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot3"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -455,6 +457,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot4"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -469,6 +472,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot5"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -483,6 +487,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot6"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -497,6 +502,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot7"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -511,6 +517,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot8"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -525,6 +532,7 @@ layout_mode = 2
 
 [node name="ActiveSlot" type="TextureRect" parent="CanvasLayer/Inventory/GridContainer/InventorySlot9"]
 visible = false
+layout_mode = 0
 offset_right = 32.0
 offset_bottom = 32.0
 texture = ExtResource("9_yhol4")
@@ -538,21 +546,30 @@ offset_bottom = 32.0
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="pressed" from="CanvasLayer/DeathControl/RespawnButton" to="." method="_on_respawn_button_pressed"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_1_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_1_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_2_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_2_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_3_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_3_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_4_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_4_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_5_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_5_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_6_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_6_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_7_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_7_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_8_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_8_mouse_exited"]
-[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_9_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_9_mouse_exited"]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [0]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [0]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot1" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [0]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [1]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [1]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot2" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [1]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [2]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [2]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot3" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [2]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [3]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [3]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot4" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [3]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [4]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [4]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot5" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [4]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [5]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [5]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot6" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [5]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [6]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [6]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot7" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [6]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [7]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [7]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot8" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [7]]
+[connection signal="gui_input" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_gui_input" binds= [8]]
+[connection signal="mouse_entered" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_entered" binds= [8]]
+[connection signal="mouse_exited" from="CanvasLayer/Inventory/GridContainer/InventorySlot9" to="CanvasLayer/Inventory" method="_on_inventory_slot_mouse_exited" binds= [8]]

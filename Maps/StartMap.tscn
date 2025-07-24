@@ -135,6 +135,18 @@ questType = 2
 [node name="Potion" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
 position = Vector2(-150, -768.5)
 
+[node name="Potion2" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
+position = Vector2(-371, -717.5)
+
+[node name="Potion3" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
+position = Vector2(-395, -829.5)
+
+[node name="Potion4" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
+position = Vector2(-611, -773.5)
+
+[node name="Potion5" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
+position = Vector2(-539, -677.5)
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 process_mode = 2
 visible = false
