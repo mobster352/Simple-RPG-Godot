@@ -75,6 +75,7 @@ func _process(delta: float) -> void:
 	if blockTimer > 0:
 		blockTimer -= delta
 	else:
+		canBlock = true
 		playAnimations()
 	if stamina < 100:
 		staminaBar.show()
@@ -163,14 +164,15 @@ func playAnimations():
 		sprite.play("Idle")
 	
 func damage(dmg:int, enemyPos:Vector2):
-	if (global_position.direction_to(enemyPos).x > 0 && global_position.direction_to(get_global_mouse_position()).x > 0) || (global_position.direction_to(enemyPos).x < 0 && global_position.direction_to(get_global_mouse_position()).x < 0) && isBlocking && stamina >= staminaDrain:
+	if ((global_position.direction_to(enemyPos).x > 0 && global_position.direction_to(get_global_mouse_position()).x > 0) || (global_position.direction_to(enemyPos).x < 0 && global_position.direction_to(get_global_mouse_position()).x < 0)) && isBlocking && stamina >= staminaDrain:
 		stamina -= staminaDrain
 		return
-	isBlocking = false
-	canMove = true
-	canBlock = false
-	blockTimer = 0.5
-	sprite.play("Idle")
+	if isBlocking:
+		isBlocking = false
+		canMove = true
+		canBlock = false
+		blockTimer = 0.5
+		sprite.play("Idle")
 	
 	var direction = enemyPos.direction_to(global_position)
 	var force = direction * knockback_strength
