@@ -48,13 +48,16 @@ func findItem(itemId:int):
 func _on_item_pickup(itemId:int):
 	var item = findItem(itemId)
 	if item:
-		var slotIndex = addItemToInventorySlot(item)
-		if slotIndex != -1:
-			inventory.set(slotIndex, item)
-			#print("Item picked up: ", item.name)
-			var slotTexture = inventoryGrid.get_child(slotIndex).get_child(1) as TextureRect
-			if slotTexture:
-				slotTexture.texture = item.texture
+		if itemId == 0:
+			Global.add_potion.emit()
+		else:
+			var slotIndex = addItemToInventorySlot(item)
+			if slotIndex != -1:
+				inventory.set(slotIndex, item)
+				#print("Item picked up: ", item.name)
+				var slotTexture = inventoryGrid.get_child(slotIndex).get_child(1) as TextureRect
+				if slotTexture:
+					slotTexture.texture = item.texture
 		
 func addItemToInventorySlot(item:Item):
 	var index:int = 0
@@ -79,10 +82,12 @@ func updateInventorySlot(slotIndex:int, isVisible:bool):
 
 func _on_inventory_slot_mouse_entered(slotIndex:int) -> void:
 	updateInventorySlot(slotIndex, true)
+	Global.toggle_player_attack.emit(false)
 
 
 func _on_inventory_slot_mouse_exited(slotIndex:int) -> void:
 	updateInventorySlot(slotIndex, false)
+	Global.toggle_player_attack.emit(true)
 
 
 func removeTexture(slotIndex:int):

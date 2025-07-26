@@ -183,7 +183,7 @@ func _on_sprite_animation_finished() -> void:
 	if sprite.animation == "Attack":
 		if player && inAttackRange:
 			if player.has_method("damage"):
-				player.call("damage", ATTACK_DAMAGE)
+				player.call("damage", ATTACK_DAMAGE, global_position)
 		attackHitbox.disabled = true
 		state = states.IDLE
 

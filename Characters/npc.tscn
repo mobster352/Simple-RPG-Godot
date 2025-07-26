@@ -106,6 +106,7 @@ offset_bottom = 40.0
 
 [node name="InteractionLabel" type="Label" parent="Control"]
 visible = false
+z_index = 1
 layout_mode = 0
 offset_left = -24.0
 offset_top = -80.0

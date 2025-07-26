@@ -7,6 +7,8 @@ signal add_quest
 signal quest_ready_to_turn_in
 signal item_pickup
 signal heal
+signal add_potion
+signal toggle_player_attack
 
 const LABEL_SPEED = 5
 const LABEL_SIZE_SMALL = 20

@@ -1,6 +1,6 @@
 extends ProgressBar
 
-@onready var player = $"../.."
+@onready var player = $"../../../"
 
 class Hp:
 	var level:int

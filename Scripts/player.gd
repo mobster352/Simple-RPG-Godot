@@ -11,25 +11,32 @@ var stamina = 100
 var weapon = Vector2(7,13)
 
 @export var speed = 100
+@export var staminaDrain = 25
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var attackHitbox = $Area2D/AttackHitbox
 @onready var hitbox = $HitboxArea/Hitbox
-@onready var healthBar = $CanvasLayer/HealthBar
+@onready var healthBar = $CanvasLayer/UI/HealthBar
 @onready var deathControl = $CanvasLayer/DeathControl
-@onready var expBar = $CanvasLayer/ExpBar
+@onready var expBar = $CanvasLayer/UI/ExpBar
 @onready var flyingTextNode = $FlyingTextNode
 @onready var staminaBar = $Control/StaminaBar
-@onready var levelLabel = $CanvasLayer/ExpBar/LevelLabel
+@onready var levelLabel = $CanvasLayer/UI/ExpBar/LevelLabel
 @onready var levelUpLabel = $Control/StaminaBar/LevelUpLabel
-@onready var healthLabel = $CanvasLayer/HealthBar/HealthLabel
+@onready var healthLabel = $CanvasLayer/UI/HealthBar/HealthLabel
 @onready var questLogControl = $CanvasLayer/QuestLog
 @onready var questsVBox = $CanvasLayer/QuestLog/MarginContainer/Quests
 @onready var inventory = $CanvasLayer/Inventory
 
+var canAttack:bool = true
 var isAttacking = false
 var startGlobalPosition:Vector2
 var canMove:bool = true
+var canBlock:bool = true
+var blockTimer:float = 0.0
+var isBlocking = false
+var knockback = Vector2.ZERO
+var knockback_strength = 500.0
 
 class ExpLevel:
 	var level:int
@@ -44,6 +51,7 @@ class QuestLog:
 	var questType: int
 	
 var showQuestLog = false
+var potionsCount = 0
 
 func _ready() -> void:
 	startGlobalPosition = global_position
@@ -60,12 +68,18 @@ func _ready() -> void:
 	Global.show_dialogue.connect(_on_show_dialogue)
 	Global.add_quest.connect(_on_add_quest)
 	Global.heal.connect(_on_heal)
+	Global.add_potion.connect(_on_add_potion)
+	Global.toggle_player_attack.connect(_on_toggle_player_attack)
 
 func _process(delta: float) -> void:
-	playAnimations()
+	if blockTimer > 0:
+		blockTimer -= delta
+	else:
+		playAnimations()
 	if stamina < 100:
 		staminaBar.show()
-		stamina += 1 * 10 * delta
+		if !isBlocking:
+			stamina += 1 * 10 * delta
 	else:
 		staminaBar.hide()
 	healthLabel.text = str(currentHP, " / ", maxHP)
@@ -85,6 +99,8 @@ func _process(delta: float) -> void:
 			inventory.hide()
 		else:
 			inventory.show()
+	if Input.is_action_just_pressed("Heal"):
+		usePotion()
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:
@@ -92,33 +108,74 @@ func _physics_process(_delta: float) -> void:
 
 func movePlayer():
 	if isAttacking:
-		return	
+		return
 	var input_vector = Vector2(
 		Input.get_action_strength("MoveRight") - Input.get_action_strength("MoveLeft"),
 		Input.get_action_strength("MoveDown") - Input.get_action_strength("MoveUp")
 	).normalized()
-	velocity = input_vector * speed
+	velocity = input_vector * speed + knockback
 	if input_vector.x != 0:
 		sprite.flip_h = input_vector.x < 0
 		var should_be_positive = input_vector.x > 0
 		if (should_be_positive and attackHitbox.position.x < 0) or (not should_be_positive and attackHitbox.position.x > 0):
 			attackHitbox.position.x *= -1
 	move_and_slide()
+	knockback = knockback.lerp(Vector2.ZERO, 0.1)
+	if knockback.distance_to(Vector2.ZERO) < 100.0:
+		knockback = Vector2.ZERO
 	
 func playAnimations():
 	if isAttacking:
 		return
-	if velocity == Vector2.ZERO:
-		sprite.play("Idle")
-	else:
-		sprite.play("Walk")
-	if Input.is_action_just_pressed("Attack") && stamina >= 25 && canMove:
+	if Input.is_action_just_pressed("Attack") && stamina >= staminaDrain && canMove && canAttack:
 		isAttacking = true
 		attackHitbox.disabled = false
 		sprite.play("Attack")
-		stamina -= 25
-		
-func damage(dmg:int):
+		stamina -= staminaDrain
+		if global_position.x - get_global_mouse_position().x > 0:
+			sprite.flip_h = true
+			if attackHitbox.position.x > 0:
+				attackHitbox.position.x *= -1
+		else:
+			sprite.flip_h = false
+			if attackHitbox.position.x < 0:
+				attackHitbox.position.x *= -1
+	elif isBlocking && stamina < staminaDrain:
+		isBlocking = false
+		canMove = true
+		canBlock = true
+		sprite.play("Idle")
+	elif Input.is_action_pressed("Block") && stamina >= staminaDrain && canBlock:
+		isBlocking = true
+		canMove = false
+		sprite.play("Block")
+		if global_position.x - get_global_mouse_position().x > 0:
+			sprite.flip_h = true
+		else:
+			sprite.flip_h = false
+	elif Input.is_action_just_released("Block"):
+		isBlocking = false
+		canMove = true
+		canBlock = true
+	elif velocity != Vector2.ZERO:
+		sprite.play("Walk")
+	else:
+		sprite.play("Idle")
+	
+func damage(dmg:int, enemyPos:Vector2):
+	if (global_position.direction_to(enemyPos).x > 0 && global_position.direction_to(get_global_mouse_position()).x > 0) || (global_position.direction_to(enemyPos).x < 0 && global_position.direction_to(get_global_mouse_position()).x < 0) && isBlocking && stamina >= staminaDrain:
+		stamina -= staminaDrain
+		return
+	isBlocking = false
+	canMove = true
+	canBlock = false
+	blockTimer = 0.5
+	sprite.play("Idle")
+	
+	var direction = enemyPos.direction_to(global_position)
+	var force = direction * knockback_strength
+	knockback = force
+	
 	currentHP -= dmg
 	Global.makeFlyingTextLabel(global_position, str(dmg), Color.RED, Global.LABEL_SIZE_BIG)
 	if currentHP <= 0:
@@ -194,6 +251,7 @@ func _on_show_dialogue(text:String, left:SpriteFrames, right:SpriteFrames):
 		canMove = true
 	else:
 		canMove = false
+	velocity = Vector2.ZERO
 		
 func _on_add_quest(questId:int):
 	var quest = questLogControl.findQuest(questId)
@@ -275,3 +333,17 @@ func markQuestReadyToTurnIn(questId:int):
 
 func _on_heal(hp:int):
 	heal(hp)
+
+func _on_add_potion():
+	potionsCount += 1
+	
+func usePotion():
+	if potionsCount > 0:
+		Global.heal.emit(10)
+		potionsCount -= 1
+		
+func getPotionCount():
+	return potionsCount
+
+func _on_toggle_player_attack(toggle:bool):
+	canAttack = toggle
