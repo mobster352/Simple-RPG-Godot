@@ -44,8 +44,8 @@ var isQuestComplete:bool = false
 func _ready() -> void:
 	Global.increment_dialogue.connect(_on_increment_dialogue)
 	Global.add_quest.connect(_on_add_quest)
-	var node = preload("res://Characters/Player/player.tscn").instantiate()
-	playerSprite = node.get_node("Sprite") as AnimatedSprite2D
+	
+	playerSprite = Global.playerSprite
 	
 	var config = ConfigFile.new()
 	var err = config.load(configFileResource)

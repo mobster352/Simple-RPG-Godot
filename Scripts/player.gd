@@ -3,19 +3,21 @@ extends CharacterBody2D
 class Player:
 	pass
 # Character Data (may make this a class)
-var level = 1
-var maxHP = 10
-var currentHP = maxHP
-var currentExp = 0
-var stamina = 100
-var weapon = Vector2(7,13)
+var level:int = 1
+var maxHP:int = 10
+var currentHP:int = maxHP
+var currentExp:int = 0
+var stamina:float = 100
+
+var playerId:int
+var weapon:Vector2
 
 @export var speed = 100
 @export var staminaDrain = 25
 
-@onready var sprite: AnimatedSprite2D = $Sprite
-@onready var attackHitbox = $Area2D/AttackHitbox
-@onready var hitbox = $HitboxArea/Hitbox
+var sprite: AnimatedSprite2D
+var attackHitbox:CollisionShape2D
+var hitbox:CollisionShape2D
 @onready var healthBar = $CanvasLayer/UI/HealthBar
 @onready var deathControl = $CanvasLayer/DeathControl
 @onready var expBar = $CanvasLayer/UI/ExpBar
@@ -32,7 +34,7 @@ var canAttack:bool = true
 var isAttacking = false
 var startGlobalPosition:Vector2
 var canMove:bool = true
-var canBlock:bool = true
+var canBlock:bool = false
 var blockTimer:float = 0.0
 var isBlocking = false
 var knockback = Vector2.ZERO
@@ -54,6 +56,18 @@ var showQuestLog = false
 var potionsCount = 0
 
 func _ready() -> void:
+	playerId = Global.playerId
+	weapon = Global.playerWeapon
+	sprite = Global.playerSprite
+	add_child(sprite)
+	hitbox = sprite.get_node("HitboxArea/Hitbox")
+	sprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
+	sprite.frame_changed.connect(_on_animated_sprite_2d_frame_changed)
+	var area2D = sprite.get_node("Area2D") as Area2D
+	if area2D:
+		attackHitbox = sprite.get_node("Area2D/AttackHitbox")
+		area2D.body_entered.connect(_on_area_2d_body_entered)
+	
 	startGlobalPosition = global_position
 	var levelIndex = 1
 	while levelIndex < 99:
@@ -75,7 +89,8 @@ func _process(delta: float) -> void:
 	if blockTimer > 0:
 		blockTimer -= delta
 	else:
-		canBlock = true
+		if playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER:
+			canBlock = true
 		playAnimations()
 	if stamina < 100:
 		staminaBar.show()
@@ -154,7 +169,7 @@ func playAnimations():
 			sprite.flip_h = true
 		else:
 			sprite.flip_h = false
-	elif Input.is_action_just_released("Block"):
+	elif Input.is_action_just_released("Block") && (playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER):
 		isBlocking = false
 		canMove = true
 		canBlock = true
@@ -234,11 +249,19 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if sprite.animation == "Attack":
 		isAttacking = false
 		attackHitbox.disabled = true
+			
+func _on_animated_sprite_2d_frame_changed():
+	if sprite.animation == "Attack" && sprite.get_frame() == 5 && playerId == Global.PlayerTypes.ARCHER:
+		var arrow = preload("res://Characters/Player/arrow.tscn").instantiate()
+		get_parent().add_child(arrow)
+		arrow.globalPosition = global_position
+		arrow.setReady(sprite.flip_h, weapon, get_local_mouse_position())
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		if body.has_method("damage"):
-			body.call("damage", randi_range(weapon.x, weapon.y))
+	if playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER:
+		if body.is_in_group("enemy"):
+			if body.has_method("damage"):
+				body.call("damage", randi_range(weapon.x, weapon.y))
 
 func _on_respawn_button_pressed() -> void:
 	global_position = startGlobalPosition

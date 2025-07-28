@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://jcpas1gdl787"]
+
+[ext_resource type="Script" uid="uid://bif28eo8jct0r" path="res://Characters/Player/arrow.gd" id="1_6hwmp"]
+[ext_resource type="Texture2D" uid="uid://bhye8h1ufok4i" path="res://Resources/Blue Units/Archer/Arrow.png" id="1_wfy27"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6hwmp"]
+size = Vector2(42, 13)
+
+[node name="Arrow" type="Node2D"]
+script = ExtResource("1_6hwmp")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_wfy27")
+
+[node name="Area2D" type="Area2D" parent="Sprite"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="ArrowCollider" type="CollisionShape2D" parent="Sprite/Area2D"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_6hwmp")
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 1.0
+default_color = Color(0.940362, 5.34251e-06, 3.85046e-07, 1)
+
+[connection signal="body_entered" from="Sprite/Area2D" to="." method="_on_area_2d_body_entered"]

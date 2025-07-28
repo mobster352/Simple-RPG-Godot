@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://dvwb7jcc5ee67"]
+
+[ext_resource type="SpriteFrames" uid="uid://dwjq6nqe4sn80" path="res://Characters/Player/archer.tres" id="1_vemkh"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6xdwp"]
+radius = 18.0
+height = 66.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vemkh"]
+size = Vector2(127.5, 77)
+
+[node name="Sprite" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_vemkh")
+animation = &"Attack"
+frame = 7
+frame_progress = 1.0
+
+[node name="HitboxArea" type="Area2D" parent="."]
+
+[node name="Hitbox" type="CollisionShape2D" parent="HitboxArea"]
+shape = SubResource("CapsuleShape2D_6xdwp")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="AttackHitbox" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(86.25, 2.5)
+shape = SubResource("RectangleShape2D_vemkh")
+disabled = true

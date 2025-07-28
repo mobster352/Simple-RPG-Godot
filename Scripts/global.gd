@@ -21,7 +21,17 @@ enum QuestType {
 	TALK
 }
 
+enum PlayerTypes {
+	WARRIOR,
+	LANCER,
+	ARCHER
+}
+
 var flyingTextNode:Node
+
+var playerId:int
+var playerSprite:AnimatedSprite2D
+var playerWeapon:Vector2
 
 func _ready() -> void:
 	flyingTextNode = Node.new()
@@ -53,3 +63,18 @@ func makeFlyingTextLabel(global_position:Vector2, text:String, color:Color, labe
 	
 func _on_timer_timeout(label:Label):
 	label.queue_free()
+	
+func initPlayer(playerId:int):
+	self.playerId = playerId
+	if playerId == PlayerTypes.WARRIOR:
+		playerSprite = preload("res://Characters/Player/warrior_sprite.tscn").instantiate()
+		playerWeapon = Vector2(7,13)
+	elif playerId == PlayerTypes.LANCER:
+		playerSprite = preload("res://Characters/Player/lancer_sprite.tscn").instantiate()
+		playerWeapon = Vector2(5,10)
+	elif playerId == PlayerTypes.ARCHER:
+		playerSprite = preload("res://Characters/Player/archer_sprite.tscn").instantiate()
+		playerWeapon = Vector2(10,15)
+	else:
+		playerSprite = preload("res://Characters/Player/warrior_sprite.tscn").instantiate()
+		playerWeapon = Vector2(7,13)
