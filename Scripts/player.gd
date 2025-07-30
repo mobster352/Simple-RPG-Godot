@@ -29,6 +29,8 @@ var hitbox:CollisionShape2D
 @onready var questLogControl = $CanvasLayer/QuestLog
 @onready var questsVBox = $CanvasLayer/QuestLog/MarginContainer/Quests
 @onready var inventory = $CanvasLayer/Inventory
+@onready var attackArc = $AttackArc
+@onready var hotbarSlot3 = $CanvasLayer/UI/Hotbar/GridContainer/Slot3
 
 var canAttack:bool = true
 var isAttacking = false
@@ -39,6 +41,9 @@ var blockTimer:float = 0.0
 var isBlocking = false
 var knockback = Vector2.ZERO
 var knockback_strength = 500.0
+var p0
+var p1
+var p2
 
 class ExpLevel:
 	var level:int
@@ -55,6 +60,8 @@ class QuestLog:
 var showQuestLog = false
 var potionsCount = 0
 
+var mousePosForArrow:Vector2
+
 func _ready() -> void:
 	playerId = Global.playerId
 	weapon = Global.playerWeapon
@@ -67,7 +74,6 @@ func _ready() -> void:
 	if area2D:
 		attackHitbox = sprite.get_node("Area2D/AttackHitbox")
 		area2D.body_entered.connect(_on_area_2d_body_entered)
-	
 	startGlobalPosition = global_position
 	var levelIndex = 1
 	while levelIndex < 99:
@@ -79,6 +85,14 @@ func _ready() -> void:
 	currentExpLevel = expArray.get(0)
 	expBar.max_value = currentExpLevel.expNextLevel
 	expBar.value = 0
+	
+	if playerId == Global.PlayerTypes.ARCHER:
+		var slot3Tex = hotbarSlot3.get_child(1) as TextureRect
+		slot3Tex.texture = null
+		var slot3Lab = hotbarSlot3.get_child(2) as Label
+		slot3Lab.text = ""
+	
+	
 	Global.show_dialogue.connect(_on_show_dialogue)
 	Global.add_quest.connect(_on_add_quest)
 	Global.heal.connect(_on_heal)
@@ -117,6 +131,14 @@ func _process(delta: float) -> void:
 			inventory.show()
 	if Input.is_action_just_pressed("Heal"):
 		usePotion()
+	#if playerId == Global.PlayerTypes.ARCHER && Input.is_action_pressed("Block"):
+		#drawAttackArc()
+		#if get_local_mouse_position().x < 0:
+			#sprite.flip_h = true
+		#else:
+			#sprite.flip_h = false
+	#if playerId == Global.PlayerTypes.ARCHER && Input.is_action_just_released("Block"):
+		#attackArc.clear_points()
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:
@@ -147,6 +169,7 @@ func playAnimations():
 		isAttacking = true
 		attackHitbox.disabled = false
 		sprite.play("Attack")
+		mousePosForArrow = get_local_mouse_position()
 		stamina -= staminaDrain
 		if global_position.x - get_global_mouse_position().x > 0:
 			sprite.flip_h = true
@@ -255,7 +278,7 @@ func _on_animated_sprite_2d_frame_changed():
 		var arrow = preload("res://Characters/Player/arrow.tscn").instantiate()
 		get_parent().add_child(arrow)
 		arrow.globalPosition = global_position
-		arrow.setReady(sprite.flip_h, weapon, get_local_mouse_position())
+		arrow.setReady(sprite.flip_h, weapon, mousePosForArrow)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER:
@@ -372,3 +395,23 @@ func getPotionCount():
 
 func _on_toggle_player_attack(toggle:bool):
 	canAttack = toggle
+	
+#func drawAttackArc():
+	#var min = Vector2(-300, -300)
+	#var max = Vector2(300, 300)
+	#var mousePos = get_local_mouse_position()
+	#var arrow_global_position = to_local(global_position)
+	#
+	#p0 = arrow_global_position
+	#p0 = p0.clamp(min, max)
+	#
+	#p1 = arrow_global_position + mousePos - Vector2(0,(arrow_global_position + mousePos).y / 2)
+	#p1 = p1.clamp(min, max)
+	#
+	#p2 = arrow_global_position + mousePos
+	#p2 = p2.clamp(min, max)
+	#
+	#attackArc.clear_points()
+	#attackArc.add_point(p0)
+	#attackArc.add_point(p1)
+	#attackArc.add_point(p2)

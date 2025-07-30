@@ -8,6 +8,7 @@ extends CharacterBody2D
 @onready var flyingTextNode = $FlyingTextNode
 @onready var navAgent:NavigationAgent2D = $NavigationAgent2D
 @onready var questSprite:Sprite2D = $QuestSprite
+@onready var isAttackedTimer:Timer = $IsAttackedTimer
 
 enum states {
 	IDLE,
@@ -44,6 +45,8 @@ const EXP_RECEIVED:int = 15
 var questId:int = 1
 var questTargetTexture:Texture2D
 
+var isAwareOfPlayer:bool = false
+
 func _ready() -> void:
 	startGlobalPosition = global_position
 	startPosition = position
@@ -78,7 +81,7 @@ func playAnimation():
 		sprite.play("Idle")
 	
 func move(delta: float):
-	if global_position.distance_to(startGlobalPosition) > RESET_DISTANCE:
+	if global_position.distance_to(startGlobalPosition) > RESET_DISTANCE && !isAwareOfPlayer:
 		state = states.RESET
 		
 	if state == states.RESET:
@@ -134,6 +137,8 @@ func move(delta: float):
 					sprite.flip_h = false
 				if canAttack:
 					attack()
+	if (isAwareOfPlayer && !inRange) || (isAwareOfPlayer && state == states.RESET):
+		state = states.CHASE
 	
 func attack():
 	state = states.ATTACK
@@ -147,6 +152,7 @@ func attack():
 	attackHitbox.disabled = false
 			
 func damage(dmg:int):
+	awareOfPlayer()
 	hp -= dmg
 	Global.makeFlyingTextLabel(global_position, str(dmg), Color.RED, Global.LABEL_SIZE_BIG)
 	if hp <= 0:
@@ -230,3 +236,11 @@ func _on_quest_ready_to_turn_in(questId:int):
 		if self.questId == questId:
 			if player.call("isOnQuest", questId):
 				questSprite.hide()
+
+func awareOfPlayer():
+	isAwareOfPlayer = true
+	isAttackedTimer.one_shot = true
+	isAttackedTimer.start(10)
+
+func _on_is_attacked_timer_timeout() -> void:
+	isAwareOfPlayer = false

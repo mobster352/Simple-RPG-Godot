@@ -43,19 +43,14 @@ func _quadratic_bezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float):
 func setReady(flip:bool, weapon:Vector2, mousePos:Vector2):
 	if flip:
 		sprite.global_position = globalPosition + Vector2(-30,-20)
-		p0 = sprite.global_position
-		p1 = globalPosition + mousePos - Vector2(0,(globalPosition + mousePos).y / 2) #+ Vector2((globalPosition + mousePos).x, 0)
-		p2 = globalPosition + mousePos
 		sprite.flip_h = true
 	else:
-		sprite.global_position = globalPosition + Vector2(-30,-20)
-		p0 = sprite.global_position
-		p1 = globalPosition + mousePos - Vector2(0,(globalPosition + mousePos).y / 2) #+ Vector2((globalPosition + mousePos).x, 0)
-		p2 = globalPosition + mousePos
+		sprite.global_position = globalPosition + Vector2(30,-20)
+	p0 = sprite.global_position
+	p1 = globalPosition + mousePos - Vector2(0,(globalPosition + mousePos).y / 2) #+ Vector2((globalPosition + mousePos).x, 0)
+	p2 = globalPosition + mousePos
 	self.weapon = weapon
 	isReady = true
-	#line.add_point(sprite.position)
-	#line.add_point(get_local_mouse_position())
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy"):
