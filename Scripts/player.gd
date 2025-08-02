@@ -139,6 +139,8 @@ func _process(delta: float) -> void:
 			#sprite.flip_h = false
 	#if playerId == Global.PlayerTypes.ARCHER && Input.is_action_just_released("Block"):
 		#attackArc.clear_points()
+	if questLogControl.isQuestActive(3) && !questLogControl.isQuestReadyToComplete(3):
+		hasItemForQuest(3, 1)
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:
@@ -315,6 +317,9 @@ func _on_add_quest(questId:int):
 	elif quest.questType == Global.QuestType.TALK:
 		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
 		questLabelName.text += str("[outline_size=5]", quest.questDesc, "[/outline_size]")
+	else:
+		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+		questLabelName.text += str("[outline_size=5]", quest.questDesc, "[/outline_size]")
 	questsVBox.add_child(questLabelName)
 	questLogControl.activeQuests.append(quest)
 
@@ -347,6 +352,12 @@ func drawQuest(questId:int, readyToBeTurnedIn:bool):
 				questNode.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
 			questNode.text += str("[outline_size=5]", quest.questDesc, " ", quest.numCompleted, "/", quest.numRequired, "[/outline_size]")
 		elif quest.questType == Global.QuestType.TALK:
+			if readyToBeTurnedIn:
+				questNode.text = str("[font_size=18][color=green][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+			else:
+				questNode.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
+			questNode.text += str("[outline_size=5]", quest.questDesc, "[/outline_size]")
+		else:
 			if readyToBeTurnedIn:
 				questNode.text = str("[font_size=18][color=green][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
 			else:
@@ -395,6 +406,13 @@ func getPotionCount():
 
 func _on_toggle_player_attack(toggle:bool):
 	canAttack = toggle
+	
+func hasItemForQuest(questId:int, itemId:int):
+	var quest = questLogControl.findActiveQuest(questId)
+	if quest:
+		var item = inventory.findItemInInventory(itemId)
+		if item:
+			markQuestReadyToTurnIn(questId)
 	
 #func drawAttackArc():
 	#var min = Vector2(-300, -300)

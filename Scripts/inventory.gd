@@ -72,6 +72,13 @@ func findItemInInventorySlot(slotIndex:int):
 	var slot = inventory.get(slotIndex)
 	if slot:
 		return slot
+		
+func findItemInInventory(itemId:int):
+	for index in range(inventory.size()):
+		var slot = inventory.get(index)
+		if slot:
+			if slot.id == itemId:
+				return slot
 
 func updateInventorySlot(slotIndex:int, isVisible:bool):
 	var textureRect = inventoryGrid.get_child(slotIndex).get_child(0) as TextureRect

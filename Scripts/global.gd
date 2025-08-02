@@ -18,7 +18,8 @@ const LABEL_SIZE_BIG = 30
 enum QuestType {
 	NONE,
 	KILL,
-	TALK
+	TALK,
+	FIND_ITEM
 }
 
 enum PlayerTypes {

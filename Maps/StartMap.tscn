@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ikjkfcqd13gp"]
+[gd_scene load_steps=14 format=3 uid="uid://ikjkfcqd13gp"]
 
 [ext_resource type="Texture2D" uid="uid://b3bh23wtrn6uj" path="res://Resources/Water/Water Background color.png" id="1_10cxu"]
 [ext_resource type="PackedScene" uid="uid://cxa5348c0w03t" path="res://Characters/Player/player.tscn" id="1_fl2so"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dne7uncb5815b" path="res://Objects/enemy_spawner.tscn" id="5_udol0"]
 [ext_resource type="PackedScene" uid="uid://bn4rh4f2e1b0x" path="res://Characters/npc.tscn" id="7_aaqyu"]
 [ext_resource type="Script" uid="uid://c1vovli70t8hk" path="res://Scripts/pause_menu.gd" id="10_gfbfn"]
+[ext_resource type="PackedScene" uid="uid://qxfnwmwu1m4n" path="res://Objects/bread.tscn" id="11_2vnn4"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_4ag65"]
 vertices = PackedVector2Array(2036.06, 613.148, 1811.48, 610.867, 1726.1, 609.844, 954, 550, 954, 508.148, 1237.85, 531.594, 867.43, 550, 1156.12, 854.094, 1150.96, 897, 1135.64, 896.93, 696.281, 893.156, 463.953, 890.859, 1365.61, 417.078, 2149.03, 407.789, 2539.82, 418.188, 1326.26, 502.117, 1250.75, 414.383, 1292.15, 416.711, 1135.92, 415.93, 1633.63, 611.148, 669, 994.859, 618.953, 995.57, 646.711, 989.82, 1342.46, 998.148, 1277.24, 997.172, 1326.05, 984.5, 2598.57, 263.844, 2742.97, 30, 2738.03, 1591.98, 1366.72, 898.078, 1635.36, 657.859, 1721, 659.141, 1828.4, 686.367, 1910.83, 718.68, 1340.55, 1040.14, 35.0625, 30, 2116.41, 269.141, 1241.74, 1006.4, 1255.6, 1002.79, 1249.05, 1038.83, 43.9375, 1587.01, 1167.31, 983.07, 556.711, 1008.48, 579.07, 1003.84, 577.648, 1043.71, 1344.28, 363, 1342.78, 416.961, 2005.48, 684.953, 1273, 897.609, 1273, 852.898, 1257.17, 363, 692, 417.211, 462.773, 413.773, 499.32, 499.477, 567.313, 530.688, 669, 1046.29, 865.547, 506.852, 662.781, 501.063, 1167.11, 505.773, 493.898, 978.188)
@@ -132,6 +133,12 @@ sections = PackedStringArray("npc_worried_guy", "npc_worried_guy_quest_started",
 questId = 2
 questType = 2
 
+[node name="NPC_BreadGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
+position = Vector2(-587, -493.5)
+sections = PackedStringArray("npc_bread_guy", "npc_bread_guy_quest_started", "npc_bread_guy_after_quest")
+questId = 3
+questType = 3
+
 [node name="Potion" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
 position = Vector2(-150, -768.5)
 
@@ -198,6 +205,9 @@ text = "Resume"
 process_mode = 2
 layout_mode = 2
 text = "Main Menu"
+
+[node name="Bread" parent="." instance=ExtResource("11_2vnn4")]
+position = Vector2(1376, 568)
 
 [connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/ResumeButton" to="CanvasLayer" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/MainMenuButton" to="CanvasLayer" method="_on_main_menu_button_pressed"]
