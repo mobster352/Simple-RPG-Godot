@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ikjkfcqd13gp"]
+[gd_scene load_steps=15 format=3 uid="uid://ikjkfcqd13gp"]
 
 [ext_resource type="Texture2D" uid="uid://b3bh23wtrn6uj" path="res://Resources/Water/Water Background color.png" id="1_10cxu"]
 [ext_resource type="PackedScene" uid="uid://cxa5348c0w03t" path="res://Characters/Player/player.tscn" id="1_fl2so"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://imah6d0dklcj" path="res://Objects/potion.tscn" id="5_jdd5n"]
 [ext_resource type="PackedScene" uid="uid://dne7uncb5815b" path="res://Objects/enemy_spawner.tscn" id="5_udol0"]
 [ext_resource type="PackedScene" uid="uid://bn4rh4f2e1b0x" path="res://Characters/npc.tscn" id="7_aaqyu"]
+[ext_resource type="PackedScene" uid="uid://c7513a7rs01dc" path="res://Objects/letter.tscn" id="10_6ko31"]
 [ext_resource type="Script" uid="uid://c1vovli70t8hk" path="res://Scripts/pause_menu.gd" id="10_gfbfn"]
 [ext_resource type="PackedScene" uid="uid://qxfnwmwu1m4n" path="res://Objects/bread.tscn" id="11_2vnn4"]
 
@@ -81,6 +82,7 @@ vertices = PackedVector2Array(2129, 279, 2584, 274, 2533, 408, 2157, 398)
 affect_navigation_mesh = true
 
 [node name="Background" type="Sprite2D" parent="GameState"]
+z_index = -2
 position = Vector2(1427, 843)
 scale = Vector2(157, 105)
 texture = ExtResource("1_10cxu")
@@ -92,6 +94,7 @@ y_sort_enabled = true
 position = Vector2(1427, 1413.5)
 
 [node name="StartMap" parent="GameState/YSort" instance=ExtResource("3_udol0")]
+z_index = -2
 y_sort_enabled = true
 position = Vector2(-1427, -1413.5)
 scale = Vector2(1.5, 1.5)
@@ -115,6 +118,7 @@ player = NodePath("../../Player")
 [node name="NPC" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
 y_sort_enabled = true
 position = Vector2(-280, -808.5)
+configFileResource = "res://Files/start_map_dialogue.cfg"
 sections = PackedStringArray("npc", "npc_quest_started", "npc_after_quest")
 questId = 1
 questType = 1
@@ -122,6 +126,7 @@ questType = 1
 [node name="NPC_ChillGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
 y_sort_enabled = true
 position = Vector2(-971, -885.5)
+configFileResource = "res://Files/start_map_dialogue.cfg"
 sections = PackedStringArray("npc_chill_guy")
 questId = 2
 isQuestTarget = true
@@ -129,12 +134,14 @@ isQuestTarget = true
 [node name="NPC_WorriedGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
 y_sort_enabled = true
 position = Vector2(-971, -661.5)
+configFileResource = "res://Files/start_map_dialogue.cfg"
 sections = PackedStringArray("npc_worried_guy", "npc_worried_guy_quest_started", "npc_worried_guy_after_quest")
 questId = 2
 questType = 2
 
 [node name="NPC_BreadGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
 position = Vector2(-587, -493.5)
+configFileResource = "res://Files/start_map_dialogue.cfg"
 sections = PackedStringArray("npc_bread_guy", "npc_bread_guy_quest_started", "npc_bread_guy_after_quest")
 questId = 3
 questType = 3
@@ -153,6 +160,9 @@ position = Vector2(-611, -773.5)
 
 [node name="Potion5" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
 position = Vector2(-539, -677.5)
+
+[node name="Letter" parent="GameState/YSort" instance=ExtResource("10_6ko31")]
+position = Vector2(-1003, -1021.5)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 process_mode = 2

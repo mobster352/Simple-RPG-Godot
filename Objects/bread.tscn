@@ -7,6 +7,7 @@
 size = Vector2(30, 28)
 
 [node name="Bread" type="Node2D"]
+z_index = -1
 script = ExtResource("1_m27vj")
 metadata/itemId = 1
 

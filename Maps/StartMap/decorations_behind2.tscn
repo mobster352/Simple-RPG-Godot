@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b7mwd47sb4pmb"]
 
-[ext_resource type="PackedScene" uid="uid://dpxqq0y3nup4y" path="res://Objects/tree3.tscn" id="1_h0y4w"]
+[ext_resource type="PackedScene" uid="uid://dpxqq0y3nup4y" path="res://Objects/map_objects/tree3.tscn" id="1_h0y4w"]
 
 [node name="Decorations_Behind2" type="Node2D"]
 

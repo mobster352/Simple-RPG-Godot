@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dhfsxtkb2com"]
 
-[ext_resource type="PackedScene" uid="uid://srfgwspo1ite" path="res://Objects/tree1.tscn" id="1_s0uww"]
-[ext_resource type="PackedScene" uid="uid://dpxqq0y3nup4y" path="res://Objects/tree3.tscn" id="2_xfyeu"]
+[ext_resource type="PackedScene" uid="uid://srfgwspo1ite" path="res://Objects/map_objects/tree1.tscn" id="1_s0uww"]
+[ext_resource type="PackedScene" uid="uid://dpxqq0y3nup4y" path="res://Objects/map_objects/tree3.tscn" id="2_xfyeu"]
 
 [node name="Decorations_Behind" type="Node2D"]
 
