@@ -107,12 +107,24 @@ position = Vector2(-467, -765.5)
 y_sort_enabled = true
 player = NodePath("../Player")
 
-[node name="Enemy" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
-position = Vector2(749, -549.5)
+[node name="RedWarrior" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
+position = Vector2(221, -461.5)
+enemyScenePath = "res://Characters/Enemy/red_warrior.tscn"
 player = NodePath("../../Player")
 
-[node name="Enemy2" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
-position = Vector2(312, -268.5)
+[node name="Skullman" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
+position = Vector2(-435, 90.5)
+enemyScenePath = "res://Characters/Enemy/skull.tscn"
+maxHp = 50
+player = NodePath("../../Player")
+
+[node name="Snake" parent="GameState/YSort/EnemySpawner" node_paths=PackedStringArray("player") instance=ExtResource("4_4ag65")]
+position = Vector2(-899, -261.5)
+enemyScenePath = "res://Characters/Enemy/snake.tscn"
+maxHp = 15
+speed = 180
+attackDamage = 1
+attackSpeed = 1.5
 player = NodePath("../../Player")
 
 [node name="NPC" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
@@ -145,6 +157,13 @@ configFileResource = "res://Files/start_map_dialogue.cfg"
 sections = PackedStringArray("npc_bread_guy", "npc_bread_guy_quest_started", "npc_bread_guy_after_quest")
 questId = 3
 questType = 3
+
+[node name="NPC_SkullGuy" parent="GameState/YSort" instance=ExtResource("7_aaqyu")]
+position = Vector2(-291, -421.5)
+configFileResource = "res://Files/start_map_dialogue.cfg"
+sections = PackedStringArray("npc_skull_guy", "npc_skull_guy_quest_started", "npc_skull_guy_after_quest")
+questId = 4
+questType = 1
 
 [node name="Potion" parent="GameState/YSort" instance=ExtResource("5_jdd5n")]
 position = Vector2(-150, -768.5)
@@ -218,6 +237,9 @@ text = "Main Menu"
 
 [node name="Bread" parent="." instance=ExtResource("11_2vnn4")]
 position = Vector2(1376, 568)
+
+[node name="Bread2" parent="." instance=ExtResource("11_2vnn4")]
+position = Vector2(872, 600)
 
 [connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/ResumeButton" to="CanvasLayer" method="_on_resume_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/VBoxContainer/MainMenuButton" to="CanvasLayer" method="_on_main_menu_button_pressed"]

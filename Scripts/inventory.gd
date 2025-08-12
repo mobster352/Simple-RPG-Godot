@@ -79,8 +79,20 @@ func findItemInInventory(itemId:int):
 		if slot:
 			if slot.id == itemId:
 				return slot
+				
+func findItemIndexInInventory(itemId:int):
+	for index in range(inventory.size()):
+		var slot = inventory.get(index)
+		if slot:
+			if slot.id == itemId:
+				return index
+				
+func removeItemInInventory(itemId:int):
+	var index = findItemIndexInInventory(itemId)
+	inventory.set(index, null)
+	updateItemSlotTexture(index)
 
-func updateInventorySlot(slotIndex:int, isVisible:bool):
+func updateActiveSlotTexture(slotIndex:int, isVisible:bool):
 	var textureRect = inventoryGrid.get_child(slotIndex).get_child(0) as TextureRect
 	if isVisible:
 		textureRect.show()
@@ -88,16 +100,16 @@ func updateInventorySlot(slotIndex:int, isVisible:bool):
 		textureRect.hide()
 
 func _on_inventory_slot_mouse_entered(slotIndex:int) -> void:
-	updateInventorySlot(slotIndex, true)
+	updateActiveSlotTexture(slotIndex, true)
 	Global.toggle_player_attack.emit(false)
 
 
 func _on_inventory_slot_mouse_exited(slotIndex:int) -> void:
-	updateInventorySlot(slotIndex, false)
+	updateActiveSlotTexture(slotIndex, false)
 	Global.toggle_player_attack.emit(true)
 
 
-func removeTexture(slotIndex:int):
+func updateItemSlotTexture(slotIndex:int):
 	var slotTexture = inventoryGrid.get_child(slotIndex).get_child(1) as TextureRect
 	if slotTexture:
 		slotTexture.texture = null
@@ -109,4 +121,4 @@ func _on_inventory_slot_gui_input(event: InputEvent, slotIndex:int) -> void:
 			if item.id == 0:
 				Global.heal.emit(item.value)
 				inventory.set(slotIndex, null)
-				removeTexture(slotIndex)
+				updateItemSlotTexture(slotIndex)

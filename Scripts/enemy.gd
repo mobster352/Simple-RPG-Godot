@@ -1,10 +1,14 @@
 extends CharacterBody2D
 
-@onready var sprite:AnimatedSprite2D = $Sprite
+@export var enemyScenePath:String
+var enemyNode:Node2D
+var sprite:AnimatedSprite2D
 @onready var hitbox:CollisionShape2D = $Hitbox
+var attackHitbox:CollisionShape2D
+var enemyType:int
+
 @onready var attackTimer:Timer = $AttackTimer
 @onready var healthBar:ProgressBar = $Control/HealthBar
-@onready var attackHitbox = $AttackArea/AttackHitbox
 @onready var flyingTextNode = $FlyingTextNode
 @onready var navAgent:NavigationAgent2D = $NavigationAgent2D
 @onready var questSprite:Sprite2D = $QuestSprite
@@ -18,10 +22,11 @@ enum states {
 }
 
 @export var maxHp:int = 30
-@export var hp:int = maxHp
+var hp:int
 @export var speed:int = 120
 @export var chaseDistance:int = 25
-@export var ATTACK_DAMAGE:int = 4
+@export var attackDamage:int = 4
+@export var attackSpeed:float = 3.0
 @export var loot:PackedScene
 
 var startGlobalPosition:Vector2
@@ -38,18 +43,43 @@ var state = states.IDLE
 
 const MOVEMENT_OFFSET:int = 50
 const PLAYER_X_ALIGNMENT:float = 0.5
-const ATTACK_TIMER_SECS:float = 3.0
 const RESET_DISTANCE:float = 1000
 const EXP_RECEIVED:int = 15
 
-var questId:int = 1
+var questIds:PackedInt32Array
 var questTargetTexture:Texture2D
 
 var isAwareOfPlayer:bool = false
 
 func _ready() -> void:
+	enemyNode = load(enemyScenePath).instantiate()
+	sprite = enemyNode.get_node("Sprite")
+	sprite.connect("animation_finished", _on_sprite_animation_finished)
+	sprite.connect("frame_changed", _on_sprite_frame_changed)
+	
+	var attackArea = enemyNode.get_node("AttackArea") as Area2D
+	attackHitbox = attackArea.get_node("AttackHitbox")
+	attackArea.connect("body_entered", _on_attack_area_body_entered)
+	attackArea.connect("body_exited", _on_attack_area_body_exited)
+	
+	var sightArea = enemyNode.get_node("SightArea") as Area2D
+	sightArea.connect("body_entered", _on_sight_area_body_entered)
+	sightArea.connect("body_exited", _on_sight_area_body_exited)
+	
+	add_child(enemyNode)
+	questIds = enemyNode.get_meta("questIds", [0])
+	
+	if enemyNode.name == "RedWarrior":
+		enemyType = Global.EnemyTypes.RedWarrior
+	elif enemyNode.name == "Skull":
+		enemyType = Global.EnemyTypes.Skull
+	elif enemyNode.name == "Snake":
+		enemyType = Global.EnemyTypes.Snake
+	
 	startGlobalPosition = global_position
 	startPosition = position
+	hp = maxHp
+	healthBar.max_value = maxHp
 	canAttack = true
 	canMove = false
 	inAttackRange = false
@@ -63,7 +93,8 @@ func _process(_delta: float) -> void:
 	healthBar.value = hp
 	if hp < maxHp:
 		healthBar.show()
-	checkQuestTarget(questId)
+	for questId in questIds:
+		checkQuestTarget(questId)
 	
 func _physics_process(delta: float) -> void:
 	move(delta)
@@ -143,7 +174,7 @@ func move(delta: float):
 func attack():
 	state = states.ATTACK
 	canAttack = false
-	attackTimer.start(ATTACK_TIMER_SECS)
+	attackTimer.start(attackSpeed)
 	if sprite.flip_h:
 		if attackHitbox.position.x > 0:
 			attackHitbox.position.x = -attackHitbox.position.x
@@ -168,30 +199,43 @@ func damage(dmg:int):
 			if player.has_method("calculateExp"):
 				player.call("calculateExp", EXP_RECEIVED)
 			if player.has_method("isOnQuest"):
-				var isOnQuest = player.call("isOnQuest", questId)
-				if isOnQuest:
-					if player.has_method("incrementQuestNum"):
-						player.call("incrementQuestNum", questId)
-		Global.enemy_died.emit(startPosition)
+				for questId in questIds:
+					var isOnQuest = player.call("isOnQuest", questId)
+					if isOnQuest:
+						if player.has_method("incrementQuestNum"):
+							player.call("incrementQuestNum", questId)
+		Global.enemy_died.emit(startPosition, enemyType)
 		queue_free()
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
+func _on_sight_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		state = states.CHASE
 		inRange = true
 
-func _on_area_2d_body_exited(body: Node2D) -> void:
+func _on_sight_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		state = states.RESET
 		inRange = false
 
 func _on_sprite_animation_finished() -> void:
 	if sprite.animation == "Attack":
-		if player && inAttackRange:
-			if player.has_method("damage"):
-				player.call("damage", ATTACK_DAMAGE, global_position)
 		attackHitbox.disabled = true
 		state = states.IDLE
+		
+func _on_sprite_frame_changed() -> void:
+	if sprite.animation == "Attack":
+		if checkEnemyAttackFrame():
+			if player && inAttackRange:
+				if player.has_method("damage"):
+					player.call("damage", attackDamage, global_position)
+
+func checkEnemyAttackFrame() -> bool:
+	if enemyType == Global.EnemyTypes.RedWarrior and sprite.get_frame() == 2 or \
+		enemyType == Global.EnemyTypes.Skull and sprite.get_frame() == 3 or \
+		enemyType == Global.EnemyTypes.Snake and sprite.get_frame() == 3:
+			return true
+	else:
+		return false
 
 func _on_attack_timer_timeout() -> void:
 	canAttack = true
@@ -217,7 +261,8 @@ func _on_attack_area_body_exited(body: Node2D) -> void:
 		inAttackRange = false
 		
 func _on_add_quest(questId:int):
-	if self.questId == questId:
+	questIds.has(questId)
+	if questIds.has(questId):
 		checkQuestTarget(questId)
 					
 func checkQuestTarget(questId:int):
@@ -233,7 +278,7 @@ func checkQuestTarget(questId:int):
 				
 func _on_quest_ready_to_turn_in(questId:int):
 	if player:
-		if self.questId == questId:
+		if questIds.has(questId):
 			if player.call("isOnQuest", questId):
 				questSprite.hide()
 

@@ -8,14 +8,13 @@ var maxHP:int = 10
 var currentHP:int = maxHP
 var currentExp:int = 0
 var stamina:float = 100
-
 var playerId:int
 var weapon:Vector2
+var sprite: AnimatedSprite2D
 
 @export var speed = 100
 @export var staminaDrain = 25
 
-var sprite: AnimatedSprite2D
 var attackHitbox:CollisionShape2D
 var hitbox:CollisionShape2D
 @onready var healthBar = $CanvasLayer/UI/HealthBar
@@ -52,11 +51,6 @@ class ExpLevel:
 var expArray:Array
 var currentExpLevel:ExpLevel
 
-class QuestLog:
-	var questId:int
-	var questName:String
-	var questType: int
-	
 var showQuestLog = false
 var potionsCount = 0
 
@@ -66,6 +60,7 @@ func _ready() -> void:
 	playerId = Global.playerId
 	weapon = Global.playerWeapon
 	sprite = Global.playerSprite
+	
 	add_child(sprite)
 	hitbox = sprite.get_node("HitboxArea/Hitbox")
 	sprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
@@ -73,7 +68,7 @@ func _ready() -> void:
 	var area2D = sprite.get_node("Area2D") as Area2D
 	if area2D:
 		attackHitbox = sprite.get_node("Area2D/AttackHitbox")
-		area2D.body_entered.connect(_on_area_2d_body_entered)
+		area2D.connect("body_entered", _on_area_2d_body_entered)
 	startGlobalPosition = global_position
 	var levelIndex = 1
 	while levelIndex < 99:
@@ -82,7 +77,7 @@ func _ready() -> void:
 		xp.expNextLevel = floor(100 * pow(levelIndex, 1.5))
 		expArray.append(xp)
 		levelIndex += 1
-	currentExpLevel = expArray.get(0)
+	currentExpLevel = getExpLevel(level)
 	expBar.max_value = currentExpLevel.expNextLevel
 	expBar.value = 0
 	
@@ -140,7 +135,7 @@ func _process(delta: float) -> void:
 	#if playerId == Global.PlayerTypes.ARCHER && Input.is_action_just_released("Block"):
 		#attackArc.clear_points()
 	if questLogControl.isQuestActive(3) && !questLogControl.isQuestReadyToComplete(3):
-		hasItemForQuest(3, 1)
+		hasItemForQuest(3)
 	
 func _physics_process(_delta: float) -> void:
 	if visible && canMove:
@@ -377,10 +372,11 @@ func tryToCompleteQuest(questId:int):
 		var questNode = getQuestNodeByQuestId(questId)
 		if questNode:
 			questNode.queue_free()
-		var removedQuest = questLogControl.removeFromActiveQuests(questId)
-		questLogControl.completedQuests.append(removedQuest)
-		calculateExp(removedQuest.expReward)
-		Global.makeFlyingTextLabel(global_position, str(removedQuest.expReward," XP"), Color.MEDIUM_PURPLE, Global.LABEL_SIZE_MEDIUM)
+		var quest = questLogControl.completeQuest(questId)
+		if quest.questType == Global.QuestType.FIND_ITEM:
+			inventory.removeItemInInventory(quest.itemId)
+		calculateExp(quest.expReward)
+		Global.makeFlyingTextLabel(global_position, str(quest.expReward," XP"), Color.MEDIUM_PURPLE, Global.LABEL_SIZE_MEDIUM)
 		return true
 	return false
 	
@@ -407,10 +403,10 @@ func getPotionCount():
 func _on_toggle_player_attack(toggle:bool):
 	canAttack = toggle
 	
-func hasItemForQuest(questId:int, itemId:int):
+func hasItemForQuest(questId:int):
 	var quest = questLogControl.findActiveQuest(questId)
 	if quest:
-		var item = inventory.findItemInInventory(itemId)
+		var item = inventory.findItemInInventory(quest.itemId)
 		if item:
 			markQuestReadyToTurnIn(questId)
 	
@@ -433,3 +429,8 @@ func hasItemForQuest(questId:int, itemId:int):
 	#attackArc.add_point(p0)
 	#attackArc.add_point(p1)
 	#attackArc.add_point(p2)
+	
+func getExpLevel(level:int):
+	for expLevel in expArray:
+		if expLevel.level == level:
+			return expLevel

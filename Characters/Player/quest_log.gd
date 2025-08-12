@@ -10,6 +10,7 @@ class Quest:
 	var numCompleted:int
 	var readyToBeTurnedIn:bool
 	var questComplete:bool
+	var itemId:int
 	
 var allQuests:Array
 var activeQuests:Array
@@ -30,8 +31,12 @@ func _ready() -> void:
 		quest.questDesc = config.get_value(q, keys.get(keys.find("desc")))
 		quest.questType = config.get_value(q, keys.get(keys.find("type")))
 		quest.expReward = config.get_value(q, keys.get(keys.find("exp_reward")))
+	
 		if quest.questType == Global.QuestType.KILL:
 			quest.numRequired = config.get_value(q, keys.get(keys.find("num_required")))
+		elif quest.questType == Global.QuestType.FIND_ITEM:
+			quest.itemId = config.get_value(q, keys.get(keys.find("itemId")))
+		
 		quest.numCompleted = 0
 		quest.readyToBeTurnedIn = false
 		quest.questComplete = false
@@ -74,3 +79,12 @@ func removeFromActiveQuests(questId:int):
 			return quest
 		index += 1
 	return null
+	
+func completeQuest(questId:int):
+	var index = 0
+	for quest in activeQuests:
+		if quest.questId == questId:
+			activeQuests.remove_at(index)
+			completedQuests.append(quest)
+			return quest
+		index += 1

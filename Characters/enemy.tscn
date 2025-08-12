@@ -1,164 +1,11 @@
-[gd_scene load_steps=29 format=3 uid="uid://3ol70s61sd67"]
+[gd_scene load_steps=5 format=3 uid="uid://3ol70s61sd67"]
 
-[ext_resource type="Texture2D" uid="uid://c7jwqr7einrm6" path="res://Resources/Red Units/Warrior/Warrior_Idle.png" id="1_04wy3"]
 [ext_resource type="Script" uid="uid://do8ngfss4a7kf" path="res://Scripts/enemy.gd" id="1_rtu5t"]
 [ext_resource type="PackedScene" uid="uid://imah6d0dklcj" path="res://Objects/potion.tscn" id="2_3tsq0"]
-[ext_resource type="Texture2D" uid="uid://bnskdsv4n36b" path="res://Resources/Red Units/Warrior/Warrior_Attack1.png" id="2_mpxx0"]
-[ext_resource type="Texture2D" uid="uid://dlqh3q5mic4kv" path="res://Resources/Red Units/Warrior/Warrior_Run.png" id="3_sdfay"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u75dg"]
-atlas = ExtResource("2_mpxx0")
-region = Rect2(0, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7n8kr"]
-atlas = ExtResource("2_mpxx0")
-region = Rect2(192, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oyr2l"]
-atlas = ExtResource("2_mpxx0")
-region = Rect2(384, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bf4kt"]
-atlas = ExtResource("2_mpxx0")
-region = Rect2(576, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jdd5n"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(0, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cfn04"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(192, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_aaqyu"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(384, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_udol0"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(576, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tidr3"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(768, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gfbfn"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(960, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2vnn4"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(1152, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6ko31"]
-atlas = ExtResource("1_04wy3")
-region = Rect2(1344, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mpxx0"]
-atlas = ExtResource("3_sdfay")
-region = Rect2(0, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3tsq0"]
-atlas = ExtResource("3_sdfay")
-region = Rect2(192, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gh648"]
-atlas = ExtResource("3_sdfay")
-region = Rect2(384, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rq3xi"]
-atlas = ExtResource("3_sdfay")
-region = Rect2(576, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gd1y4"]
-atlas = ExtResource("3_sdfay")
-region = Rect2(768, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dcb8l"]
-atlas = ExtResource("3_sdfay")
-region = Rect2(960, 0, 192, 192)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_elrq2"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_u75dg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7n8kr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_oyr2l")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bf4kt")
-}],
-"loop": false,
-"name": &"Attack",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jdd5n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cfn04")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_aaqyu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_udol0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tidr3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gfbfn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2vnn4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6ko31")
-}],
-"loop": true,
-"name": &"Idle",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mpxx0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3tsq0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gh648")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rq3xi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gd1y4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dcb8l")
-}],
-"loop": true,
-"name": &"Walk",
-"speed": 10.0
-}]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_573b1"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rtu5t"]
 radius = 19.0
 height = 70.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_rtu5t"]
-radius = 402.011
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mpxx0"]
-size = Vector2(71.5, 103)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mpxx0"]
 bg_color = Color(0.698039, 0, 0.168627, 1)
@@ -170,29 +17,13 @@ collision_mask = 0
 script = ExtResource("1_rtu5t")
 loot = ExtResource("2_3tsq0")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_elrq2")
-animation = &"Attack"
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_rtu5t")
 
 [node name="QuestSprite" type="Sprite2D" parent="."]
 visible = false
 z_index = 1
 position = Vector2(0, -72)
-
-[node name="Hitbox" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_573b1")
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="Sight" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_rtu5t")
-
-[node name="AttackArea" type="Area2D" parent="."]
-
-[node name="AttackHitbox" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(31.75, 7.5)
-shape = SubResource("RectangleShape2D_mpxx0")
-disabled = true
 
 [node name="AttackTimer" type="Timer" parent="."]
 
@@ -231,11 +62,6 @@ show_percentage = false
 [node name="FlyingTextNode" type="Node2D" parent="."]
 z_index = 1
 
-[connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]
-[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
-[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
-[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="timeout" from="IsAttackedTimer" to="." method="_on_is_attacked_timer_timeout"]
 [connection signal="navigation_finished" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_navigation_finished"]

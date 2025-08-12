@@ -28,6 +28,12 @@ enum PlayerTypes {
 	ARCHER
 }
 
+enum EnemyTypes {
+	RedWarrior,
+	Skull,
+	Snake
+}
+
 var flyingTextNode:Node
 
 var playerId:int
