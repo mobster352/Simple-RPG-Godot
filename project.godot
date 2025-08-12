@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 Global="*res://Scripts/global.gd"
 GlobalDialogue="*res://Scripts/global_dialogue.gd"
+PlayerData="*res://Scripts/player_data.gd"
 
 [display]
 

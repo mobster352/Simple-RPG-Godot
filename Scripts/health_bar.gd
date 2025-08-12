@@ -1,7 +1,5 @@
 extends ProgressBar
 
-@onready var player = $"../../../"
-
 class Hp:
 	var level:int
 	var size:int
@@ -22,8 +20,8 @@ func _ready() -> void:
 	max_value = currentHp.maxValue
 
 func _process(_delta: float) -> void:
-	if currentHp.level != player.level:
-		var hp = getHpFromPlayerLevel(player.level)
+	if currentHp.level != PlayerData.level:
+		var hp = getHpFromPlayerLevel(PlayerData.level)
 		max_value = hp.maxValue
 		currentHp = hp
 

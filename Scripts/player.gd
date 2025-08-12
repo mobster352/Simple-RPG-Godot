@@ -1,17 +1,5 @@
 extends CharacterBody2D
 
-class Player:
-	pass
-# Character Data (may make this a class)
-var level:int = 1
-var maxHP:int = 10
-var currentHP:int = maxHP
-var currentExp:int = 0
-var stamina:float = 100
-var playerId:int
-var weapon:Vector2
-var sprite: AnimatedSprite2D
-
 @export var speed = 100
 @export var staminaDrain = 25
 
@@ -57,18 +45,14 @@ var potionsCount = 0
 var mousePosForArrow:Vector2
 
 func _ready() -> void:
-	playerId = Global.playerId
-	weapon = Global.playerWeapon
-	sprite = Global.playerSprite
-	
-	add_child(sprite)
-	hitbox = sprite.get_node("HitboxArea/Hitbox")
-	sprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
-	sprite.frame_changed.connect(_on_animated_sprite_2d_frame_changed)
-	var area2D = sprite.get_node("Area2D") as Area2D
-	if area2D:
-		attackHitbox = sprite.get_node("Area2D/AttackHitbox")
-		area2D.connect("body_entered", _on_area_2d_body_entered)
+	add_child(PlayerData.sprite)
+	hitbox = PlayerData.sprite.get_node("HitboxArea/Hitbox")
+	PlayerData.sprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
+	PlayerData.sprite.frame_changed.connect(_on_animated_sprite_2d_frame_changed)
+	var attackArea = PlayerData.sprite.get_node("AttackArea") as Area2D
+	if attackArea:
+		attackHitbox = PlayerData.sprite.get_node("AttackArea/AttackHitbox")
+		attackArea.connect("body_entered", _on_attack_area_body_entered)
 	startGlobalPosition = global_position
 	var levelIndex = 1
 	while levelIndex < 99:
@@ -77,16 +61,15 @@ func _ready() -> void:
 		xp.expNextLevel = floor(100 * pow(levelIndex, 1.5))
 		expArray.append(xp)
 		levelIndex += 1
-	currentExpLevel = getExpLevel(level)
+	currentExpLevel = getExpLevel(PlayerData.level)
 	expBar.max_value = currentExpLevel.expNextLevel
 	expBar.value = 0
 	
-	if playerId == Global.PlayerTypes.ARCHER:
+	if PlayerData.playerId == PlayerData.PlayerTypes.ARCHER:
 		var slot3Tex = hotbarSlot3.get_child(1) as TextureRect
 		slot3Tex.texture = null
 		var slot3Lab = hotbarSlot3.get_child(2) as Label
 		slot3Lab.text = ""
-	
 	
 	Global.show_dialogue.connect(_on_show_dialogue)
 	Global.add_quest.connect(_on_add_quest)
@@ -98,19 +81,19 @@ func _process(delta: float) -> void:
 	if blockTimer > 0:
 		blockTimer -= delta
 	else:
-		if playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER:
+		if PlayerData.playerId == PlayerData.PlayerTypes.WARRIOR || PlayerData.playerId == PlayerData.PlayerTypes.LANCER:
 			canBlock = true
 		playAnimations()
-	if stamina < 100:
+	if PlayerData.stamina < 100:
 		staminaBar.show()
 		if !isBlocking:
-			stamina += 1 * 10 * delta
+			PlayerData.stamina += 1 * 10 * delta
 	else:
 		staminaBar.hide()
-	healthLabel.text = str(currentHP, " / ", maxHP)
-	healthBar.value = currentHP
-	staminaBar.value = stamina
-	levelLabel.text = str("Lv ", level)
+	healthLabel.text = str(PlayerData.currentHP, " / ", PlayerData.maxHP)
+	healthBar.value = PlayerData.currentHP
+	staminaBar.value = PlayerData.stamina
+	levelLabel.text = str("Lv ", PlayerData.level)
 	
 	if Input.is_action_just_pressed("QuestLog"):
 		if showQuestLog:
@@ -126,14 +109,6 @@ func _process(delta: float) -> void:
 			inventory.show()
 	if Input.is_action_just_pressed("Heal"):
 		usePotion()
-	#if playerId == Global.PlayerTypes.ARCHER && Input.is_action_pressed("Block"):
-		#drawAttackArc()
-		#if get_local_mouse_position().x < 0:
-			#sprite.flip_h = true
-		#else:
-			#sprite.flip_h = false
-	#if playerId == Global.PlayerTypes.ARCHER && Input.is_action_just_released("Block"):
-		#attackArc.clear_points()
 	if questLogControl.isQuestActive(3) && !questLogControl.isQuestReadyToComplete(3):
 		hasItemForQuest(3)
 	
@@ -150,7 +125,7 @@ func movePlayer():
 	).normalized()
 	velocity = input_vector * speed + knockback
 	if input_vector.x != 0:
-		sprite.flip_h = input_vector.x < 0
+		PlayerData.sprite.flip_h = input_vector.x < 0
 		var should_be_positive = input_vector.x > 0
 		if (should_be_positive and attackHitbox.position.x < 0) or (not should_be_positive and attackHitbox.position.x > 0):
 			attackHitbox.position.x *= -1
@@ -162,87 +137,86 @@ func movePlayer():
 func playAnimations():
 	if isAttacking:
 		return
-	if Input.is_action_just_pressed("Attack") && stamina >= staminaDrain && canMove && canAttack:
+	if Input.is_action_just_pressed("Attack") && PlayerData.stamina >= staminaDrain && canMove && canAttack:
 		isAttacking = true
 		attackHitbox.disabled = false
-		sprite.play("Attack")
+		PlayerData.sprite.play("Attack")
 		mousePosForArrow = get_local_mouse_position()
-		stamina -= staminaDrain
+		PlayerData.stamina -= staminaDrain
 		if global_position.x - get_global_mouse_position().x > 0:
-			sprite.flip_h = true
+			PlayerData.sprite.flip_h = true
 			if attackHitbox.position.x > 0:
 				attackHitbox.position.x *= -1
 		else:
-			sprite.flip_h = false
+			PlayerData.sprite.flip_h = false
 			if attackHitbox.position.x < 0:
 				attackHitbox.position.x *= -1
-	elif isBlocking && stamina < staminaDrain:
+	elif isBlocking && PlayerData.stamina < staminaDrain:
 		isBlocking = false
 		canMove = true
 		canBlock = true
-		sprite.play("Idle")
-	elif Input.is_action_pressed("Block") && stamina >= staminaDrain && canBlock:
+		PlayerData.sprite.play("Idle")
+	elif Input.is_action_pressed("Block") && PlayerData.stamina >= staminaDrain && canBlock:
 		isBlocking = true
 		canMove = false
-		sprite.play("Block")
+		PlayerData.sprite.play("Block")
 		if global_position.x - get_global_mouse_position().x > 0:
-			sprite.flip_h = true
+			PlayerData.sprite.flip_h = true
 		else:
-			sprite.flip_h = false
-	elif Input.is_action_just_released("Block") && (playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER):
+			PlayerData.sprite.flip_h = false
+	elif Input.is_action_just_released("Block") && (PlayerData.playerId == PlayerData.PlayerTypes.WARRIOR || PlayerData.playerId == PlayerData.PlayerTypes.LANCER):
 		isBlocking = false
 		canMove = true
 		canBlock = true
 	elif velocity != Vector2.ZERO:
-		sprite.play("Walk")
+		PlayerData.sprite.play("Walk")
 	else:
-		sprite.play("Idle")
+		PlayerData.sprite.play("Idle")
 	
 func damage(dmg:int, enemyPos:Vector2):
-	if ((global_position.direction_to(enemyPos).x > 0 && global_position.direction_to(get_global_mouse_position()).x > 0) || (global_position.direction_to(enemyPos).x < 0 && global_position.direction_to(get_global_mouse_position()).x < 0)) && isBlocking && stamina >= staminaDrain:
-		stamina -= staminaDrain
+	if ((global_position.direction_to(enemyPos).x > 0 && global_position.direction_to(get_global_mouse_position()).x > 0) || (global_position.direction_to(enemyPos).x < 0 && global_position.direction_to(get_global_mouse_position()).x < 0)) && isBlocking && PlayerData.stamina >= staminaDrain:
+		PlayerData.stamina -= staminaDrain
 		return
 	if isBlocking:
 		isBlocking = false
 		canMove = true
 		canBlock = false
 		blockTimer = 0.5
-		sprite.play("Idle")
+		PlayerData.sprite.play("Idle")
 	
 	var direction = enemyPos.direction_to(global_position)
 	var force = direction * knockback_strength
 	knockback = force
 	
-	currentHP -= dmg
+	PlayerData.currentHP -= dmg
 	Global.makeFlyingTextLabel(global_position, str(dmg), Color.RED, Global.LABEL_SIZE_BIG)
-	if currentHP <= 0:
+	if PlayerData.currentHP <= 0:
 		print("You Died")
 		deathControl.show()
 		hide()
 		hitbox.disabled = true
 		
 func heal(hp:int):
-	if currentHP + hp <= maxHP:
-		currentHP += hp
+	if PlayerData.currentHP + hp <= PlayerData.maxHP:
+		PlayerData.currentHP += hp
 	else:
-		currentHP = maxHP
+		PlayerData.currentHP = PlayerData.maxHP
 	Global.makeFlyingTextLabel(global_position, str("+", hp), Color.GREEN, Global.LABEL_SIZE_MEDIUM)
 		
 func refreshCurrentExpFromPlayerLevel():
 	for xp in expArray:
-		if xp.level == level:
+		if xp.level == PlayerData.level:
 			currentExpLevel = xp
 			return
 		
 func levelUp():
-	if level < 100:
-		level += 1
+	if PlayerData.level < 100:
+		PlayerData.level += 1
 		refreshCurrentExpFromPlayerLevel()
-		var hp = healthBar.getHpFromPlayerLevel(level)
-		maxHP = hp.maxValue
-		currentHP = maxHP
-		print("Level Up: ", level)
-		#print("XP Next Level: ", currentExpLevel.expNextLevel)
+		var hp = healthBar.getHpFromPlayerLevel(PlayerData.level)
+		PlayerData.maxHP = hp.maxValue
+		PlayerData.currentHP = PlayerData.maxHP
+		print("Level Up: ", PlayerData.level)
 		levelUpLabel.show()
 		var timer = Timer.new()
 		timer.wait_time = 2
@@ -255,37 +229,36 @@ func _on_level_up_timer_timeout(timer:Timer):
 	timer.queue_free()
 		
 func calculateExp(expToGain:int):
-	#print("Gained ", expToGain, " XP")
-	var newExp = currentExp + expToGain
+	var newExp = PlayerData.currentExp + expToGain
 	if newExp >= currentExpLevel.expNextLevel:
 		levelUp()
-		currentExp = newExp - currentExp
+		PlayerData.currentExp = newExp - PlayerData.currentExp
 		expBar.max_value = currentExpLevel.expNextLevel
 	else:
-		currentExp = newExp
-	expBar.value = currentExp
+		PlayerData.currentExp = newExp
+	expBar.value = PlayerData.currentExp
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	if sprite.animation == "Attack":
+	if PlayerData.sprite.animation == "Attack":
 		isAttacking = false
 		attackHitbox.disabled = true
 			
 func _on_animated_sprite_2d_frame_changed():
-	if sprite.animation == "Attack" && sprite.get_frame() == 5 && playerId == Global.PlayerTypes.ARCHER:
+	if PlayerData.sprite.animation == "Attack" && PlayerData.sprite.get_frame() == 5 && PlayerData.playerId == PlayerData.PlayerTypes.ARCHER:
 		var arrow = preload("res://Characters/Player/arrow.tscn").instantiate()
 		get_parent().add_child(arrow)
 		arrow.globalPosition = global_position
-		arrow.setReady(sprite.flip_h, weapon, mousePosForArrow)
+		arrow.setReady(PlayerData.sprite.flip_h, PlayerData.weapon, mousePosForArrow)
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	if playerId == Global.PlayerTypes.WARRIOR || playerId == Global.PlayerTypes.LANCER:
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	if PlayerData.playerId == PlayerData.PlayerTypes.WARRIOR || PlayerData.playerId == PlayerData.PlayerTypes.LANCER:
 		if body.is_in_group("enemy"):
 			if body.has_method("damage"):
-				body.call("damage", randi_range(weapon.x, weapon.y))
+				body.call("damage", randi_range(PlayerData.weapon.x, PlayerData.weapon.y))
 
 func _on_respawn_button_pressed() -> void:
 	global_position = startGlobalPosition
-	currentHP = maxHP
+	PlayerData.currentHP = PlayerData.maxHP
 	show()
 	hitbox.disabled = false
 	deathControl.hide()
@@ -409,26 +382,6 @@ func hasItemForQuest(questId:int):
 		var item = inventory.findItemInInventory(quest.itemId)
 		if item:
 			markQuestReadyToTurnIn(questId)
-	
-#func drawAttackArc():
-	#var min = Vector2(-300, -300)
-	#var max = Vector2(300, 300)
-	#var mousePos = get_local_mouse_position()
-	#var arrow_global_position = to_local(global_position)
-	#
-	#p0 = arrow_global_position
-	#p0 = p0.clamp(min, max)
-	#
-	#p1 = arrow_global_position + mousePos - Vector2(0,(arrow_global_position + mousePos).y / 2)
-	#p1 = p1.clamp(min, max)
-	#
-	#p2 = arrow_global_position + mousePos
-	#p2 = p2.clamp(min, max)
-	#
-	#attackArc.clear_points()
-	#attackArc.add_point(p0)
-	#attackArc.add_point(p1)
-	#attackArc.add_point(p2)
 	
 func getExpLevel(level:int):
 	for expLevel in expArray:

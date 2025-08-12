@@ -20,11 +20,11 @@ frame_progress = 1.0
 [node name="Hitbox" type="CollisionShape2D" parent="HitboxArea"]
 shape = SubResource("CapsuleShape2D_6xdwp")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="AttackArea" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
-[node name="AttackHitbox" type="CollisionShape2D" parent="Area2D"]
+[node name="AttackHitbox" type="CollisionShape2D" parent="AttackArea"]
 position = Vector2(86.25, 2.5)
 shape = SubResource("RectangleShape2D_vemkh")
 disabled = true
