@@ -261,7 +261,6 @@ func _on_attack_area_body_exited(body: Node2D) -> void:
 		inAttackRange = false
 		
 func _on_add_quest(questId:int):
-	questIds.has(questId)
 	if questIds.has(questId):
 		checkQuestTarget(questId)
 					

@@ -1,0 +1,71 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckndp1soujpgq"]
+
+[ext_resource type="Script" uid="uid://c1vovli70t8hk" path="res://Scripts/pause_menu.gd" id="1_tykjp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tidr3"]
+font_size = 32
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 2
+visible = false
+script = ExtResource("1_tykjp")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 289.0
+offset_top = 128.0
+offset_right = -287.0
+offset_bottom = 512.0
+grow_horizontal = 2
+color = Color(0.513726, 0.513726, 0.513726, 0.341176)
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -57.0
+offset_right = 57.0
+offset_bottom = 45.0
+grow_horizontal = 2
+text = "Paused"
+label_settings = SubResource("LabelSettings_tidr3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = 48.0
+offset_right = 48.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="ResumeButton" type="Button" parent="ColorRect/VBoxContainer"]
+process_mode = 2
+layout_mode = 2
+text = "Resume"
+
+[node name="MainMenuButton" type="Button" parent="ColorRect/VBoxContainer"]
+process_mode = 2
+layout_mode = 2
+text = "Main Menu"
+
+[node name="TestMapButton" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "Test Map"
+
+[node name="StartMapButton" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "Start Map"
+
+[connection signal="pressed" from="ColorRect/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/TestMapButton" to="." method="_on_test_map_button_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/StartMapButton" to="." method="_on_start_map_button_pressed"]

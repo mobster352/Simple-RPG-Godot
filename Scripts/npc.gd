@@ -36,7 +36,6 @@ class DialogueMap:
 	var line:String
 	
 var dialogueMapArrayList:Array
-var isQuestComplete:bool = false
 
 func _ready() -> void:
 	Global.add_quest.connect(_on_add_quest)
@@ -44,7 +43,7 @@ func _ready() -> void:
 	questStartedSpriteTexture = load("res://Resources/Raven_Fantasy_Icons/fb43.png")
 	questInProgressSpriteTexture = load("res://Resources/Raven_Fantasy_Icons/fb13.png")
 	questReadyToTurnInTexture = load("res://Resources/Raven_Fantasy_Icons/fb41.png")
-	if questType != Global.QuestType.NONE:
+	if questType != Global.QuestType.NONE and not PlayerData.isQuestCompleted(questId):
 		questSprite.texture = questStartedSpriteTexture
 		questSprite.show()
 	Global.quest_ready_to_turn_in.connect(_on_quest_ready_to_turn_in)
@@ -64,7 +63,7 @@ func _process(_delta: float) -> void:
 				if player.has_method("markQuestReadyToTurnIn"):
 					player.call("markQuestReadyToTurnIn", questId)
 		else:
-			if isQuestComplete:
+			if PlayerData.isQuestCompleted(questId):
 				GlobalDialogue.playDialogue(dialogueMapArrayList, QuestDialog.AFTER_QUEST)
 			else:
 				var isOnQuest = false
@@ -76,7 +75,7 @@ func _process(_delta: float) -> void:
 					if isFinishedPlaying:
 						if player:
 							if player.has_method("tryToCompleteQuest"):
-								isQuestComplete = player.call("tryToCompleteQuest", questId)
+								var isQuestComplete = player.call("tryToCompleteQuest", questId)
 								if isQuestComplete:
 									GlobalDialogue.playDialogue(dialogueMapArrayList, QuestDialog.AFTER_QUEST)
 									questSprite.hide()
@@ -84,8 +83,6 @@ func _process(_delta: float) -> void:
 					var isFinishedPlaying = GlobalDialogue.playDialogue(dialogueMapArrayList, QuestDialog.BEFORE_QUEST)
 					if isFinishedPlaying:
 						Global.add_quest.emit(questId)
-						if questType != Global.QuestType.NONE:
-							questSprite.texture = null
 
 func _on_area_2d_body_entered(_body: Node2D) -> void:
 	if _body.is_in_group("player"):
@@ -113,3 +110,5 @@ func _on_add_quest(questId:int):
 	if self.questId == questId && isQuestTarget:
 		questSprite.texture = questInProgressSpriteTexture
 		questSprite.show()
+	elif self.questId == questId && questType != Global.QuestType.NONE:
+		questSprite.texture = null

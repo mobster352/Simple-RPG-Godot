@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://map"]
+
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_rpgw/Layer_2_0.tscn" id="0_id"]
+[ext_resource type="PackedScene" path="res://Resources/Maps/test_map_rpgw/Layer_0_1.tscn" id="1_id"]
+
+[node name="map" type="Node2D"]
+
+[node name="Layer_0_1" parent="." instance=ExtResource("1_id")]
+
+[node name="Layer_2_0" parent="." instance=ExtResource("0_id")]

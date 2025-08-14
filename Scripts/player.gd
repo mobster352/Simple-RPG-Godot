@@ -16,6 +16,7 @@ var hitbox:CollisionShape2D
 @onready var questLogControl = $CanvasLayer/QuestLog
 @onready var questsVBox = $CanvasLayer/QuestLog/MarginContainer/Quests
 @onready var inventory = $CanvasLayer/Inventory
+@onready var inventoryGrid = $CanvasLayer/Inventory/GridContainer
 @onready var attackArc = $AttackArc
 @onready var hotbarSlot3 = $CanvasLayer/UI/Hotbar/GridContainer/Slot3
 
@@ -40,18 +41,23 @@ var expArray:Array
 var currentExpLevel:ExpLevel
 
 var showQuestLog = false
-var potionsCount = 0
 
 var mousePosForArrow:Vector2
 
+var playerSprite:AnimatedSprite2D
+
 func _ready() -> void:
-	add_child(PlayerData.sprite)
-	hitbox = PlayerData.sprite.get_node("HitboxArea/Hitbox")
-	PlayerData.sprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
-	PlayerData.sprite.frame_changed.connect(_on_animated_sprite_2d_frame_changed)
-	var attackArea = PlayerData.sprite.get_node("AttackArea") as Area2D
+	if not PlayerData.playerId:
+		print("init player")
+		PlayerData.initPlayer(0)
+	playerSprite = load(PlayerData.spritePath).instantiate()
+	add_child(playerSprite)
+	hitbox = playerSprite.get_node("HitboxArea/Hitbox")
+	playerSprite.animation_finished.connect(_on_animated_sprite_2d_animation_finished)
+	playerSprite.frame_changed.connect(_on_animated_sprite_2d_frame_changed)
+	var attackArea = playerSprite.get_node("AttackArea") as Area2D
 	if attackArea:
-		attackHitbox = PlayerData.sprite.get_node("AttackArea/AttackHitbox")
+		attackHitbox = playerSprite.get_node("AttackArea/AttackHitbox")
 		attackArea.connect("body_entered", _on_attack_area_body_entered)
 	startGlobalPosition = global_position
 	var levelIndex = 1
@@ -63,7 +69,7 @@ func _ready() -> void:
 		levelIndex += 1
 	currentExpLevel = getExpLevel(PlayerData.level)
 	expBar.max_value = currentExpLevel.expNextLevel
-	expBar.value = 0
+	expBar.value = PlayerData.currentExp
 	
 	if PlayerData.playerId == PlayerData.PlayerTypes.ARCHER:
 		var slot3Tex = hotbarSlot3.get_child(1) as TextureRect
@@ -71,11 +77,22 @@ func _ready() -> void:
 		var slot3Lab = hotbarSlot3.get_child(2) as Label
 		slot3Lab.text = ""
 	
+	var inventoryIndex = 0
+	for slot in inventoryGrid.get_children():
+		var inventoryItem = PlayerData.inventory.get(inventoryIndex)
+		if inventoryItem:
+			var itemSlot = slot.get_child(1) as TextureRect
+			itemSlot.texture = PlayerData.inventory.get(inventoryIndex).texture
+		inventoryIndex += 1
+	
 	Global.show_dialogue.connect(_on_show_dialogue)
 	Global.add_quest.connect(_on_add_quest)
 	Global.heal.connect(_on_heal)
 	Global.add_potion.connect(_on_add_potion)
 	Global.toggle_player_attack.connect(_on_toggle_player_attack)
+	
+	for quest in PlayerData.activeQuests:
+		Global.add_quest.emit(quest.questId)
 
 func _process(delta: float) -> void:
 	if blockTimer > 0:
@@ -125,7 +142,7 @@ func movePlayer():
 	).normalized()
 	velocity = input_vector * speed + knockback
 	if input_vector.x != 0:
-		PlayerData.sprite.flip_h = input_vector.x < 0
+		playerSprite.flip_h = input_vector.x < 0
 		var should_be_positive = input_vector.x > 0
 		if (should_be_positive and attackHitbox.position.x < 0) or (not should_be_positive and attackHitbox.position.x > 0):
 			attackHitbox.position.x *= -1
@@ -140,38 +157,38 @@ func playAnimations():
 	if Input.is_action_just_pressed("Attack") && PlayerData.stamina >= staminaDrain && canMove && canAttack:
 		isAttacking = true
 		attackHitbox.disabled = false
-		PlayerData.sprite.play("Attack")
+		playerSprite.play("Attack")
 		mousePosForArrow = get_local_mouse_position()
 		PlayerData.stamina -= staminaDrain
 		if global_position.x - get_global_mouse_position().x > 0:
-			PlayerData.sprite.flip_h = true
+			playerSprite.flip_h = true
 			if attackHitbox.position.x > 0:
 				attackHitbox.position.x *= -1
 		else:
-			PlayerData.sprite.flip_h = false
+			playerSprite.flip_h = false
 			if attackHitbox.position.x < 0:
 				attackHitbox.position.x *= -1
 	elif isBlocking && PlayerData.stamina < staminaDrain:
 		isBlocking = false
 		canMove = true
 		canBlock = true
-		PlayerData.sprite.play("Idle")
+		playerSprite.play("Idle")
 	elif Input.is_action_pressed("Block") && PlayerData.stamina >= staminaDrain && canBlock:
 		isBlocking = true
 		canMove = false
-		PlayerData.sprite.play("Block")
+		playerSprite.play("Block")
 		if global_position.x - get_global_mouse_position().x > 0:
-			PlayerData.sprite.flip_h = true
+			playerSprite.flip_h = true
 		else:
-			PlayerData.sprite.flip_h = false
+			playerSprite.flip_h = false
 	elif Input.is_action_just_released("Block") && (PlayerData.playerId == PlayerData.PlayerTypes.WARRIOR || PlayerData.playerId == PlayerData.PlayerTypes.LANCER):
 		isBlocking = false
 		canMove = true
 		canBlock = true
 	elif velocity != Vector2.ZERO:
-		PlayerData.sprite.play("Walk")
+		playerSprite.play("Walk")
 	else:
-		PlayerData.sprite.play("Idle")
+		playerSprite.play("Idle")
 	
 func damage(dmg:int, enemyPos:Vector2):
 	if ((global_position.direction_to(enemyPos).x > 0 && global_position.direction_to(get_global_mouse_position()).x > 0) || (global_position.direction_to(enemyPos).x < 0 && global_position.direction_to(get_global_mouse_position()).x < 0)) && isBlocking && PlayerData.stamina >= staminaDrain:
@@ -182,7 +199,7 @@ func damage(dmg:int, enemyPos:Vector2):
 		canMove = true
 		canBlock = false
 		blockTimer = 0.5
-		PlayerData.sprite.play("Idle")
+		playerSprite.play("Idle")
 	
 	var direction = enemyPos.direction_to(global_position)
 	var force = direction * knockback_strength
@@ -239,16 +256,16 @@ func calculateExp(expToGain:int):
 	expBar.value = PlayerData.currentExp
 
 func _on_animated_sprite_2d_animation_finished() -> void:
-	if PlayerData.sprite.animation == "Attack":
+	if playerSprite.animation == "Attack":
 		isAttacking = false
 		attackHitbox.disabled = true
 			
 func _on_animated_sprite_2d_frame_changed():
-	if PlayerData.sprite.animation == "Attack" && PlayerData.sprite.get_frame() == 5 && PlayerData.playerId == PlayerData.PlayerTypes.ARCHER:
+	if playerSprite.animation == "Attack" && playerSprite.get_frame() == 5 && PlayerData.playerId == PlayerData.PlayerTypes.ARCHER:
 		var arrow = preload("res://Characters/Player/arrow.tscn").instantiate()
 		get_parent().add_child(arrow)
 		arrow.globalPosition = global_position
-		arrow.setReady(PlayerData.sprite.flip_h, PlayerData.weapon, mousePosForArrow)
+		arrow.setReady(playerSprite.flip_h, PlayerData.weapon, mousePosForArrow)
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if PlayerData.playerId == PlayerData.PlayerTypes.WARRIOR || PlayerData.playerId == PlayerData.PlayerTypes.LANCER:
@@ -272,24 +289,21 @@ func _on_show_dialogue(text:String, left:SpriteFrames, right:SpriteFrames):
 	velocity = Vector2.ZERO
 		
 func _on_add_quest(questId:int):
-	var quest = questLogControl.findQuest(questId)
 	var questLabelName = RichTextLabel.new()
 	questLabelName.bbcode_enabled = true
-	questLabelName.set_meta("questId", quest.questId)
+	questLabelName.set_meta("questId", questId)
 	questLabelName.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	questLabelName.set_anchors_preset(Control.PRESET_FULL_RECT)
 	questLabelName.fit_content = true
-	if quest.questType == Global.QuestType.KILL:
-		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
-		questLabelName.text += str("[outline_size=5]", quest.questDesc, " ", quest.numCompleted, "/", quest.numRequired, "[/outline_size]")
-	elif quest.questType == Global.QuestType.TALK:
-		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
-		questLabelName.text += str("[outline_size=5]", quest.questDesc, "[/outline_size]")
-	else:
-		questLabelName.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
-		questLabelName.text += str("[outline_size=5]", quest.questDesc, "[/outline_size]")
 	questsVBox.add_child(questLabelName)
-	questLogControl.activeQuests.append(quest)
+	
+	var quest = questLogControl.findQuest(questId)
+	var isReadyToBeTurnedIn = questLogControl.isQuestReadyToComplete(questId)
+	if isReadyToBeTurnedIn:
+		Global.quest_ready_to_turn_in.emit(questId)
+	if not questLogControl.isQuestActive(questId):
+		PlayerData.activeQuests.append(quest)
+	drawQuest(questId, isReadyToBeTurnedIn)
 
 func isOnQuest(questId:int):
 	if questLogControl.isQuestActive(questId):
@@ -302,15 +316,16 @@ func isQuestReadyToComplete(questId:int):
 	return false
 	
 func incrementQuestNum(questId:int):
-	var quest = questLogControl.findQuest(questId)
+	var quest = questLogControl.findActiveQuest(questId)
 	if quest.numCompleted < quest.numRequired:
 		quest.numCompleted += 1
 	if quest.numCompleted >= quest.numRequired:
 		markQuestReadyToTurnIn(questId)
-	drawQuest(questId, quest.readyToBeTurnedIn)
+	else:
+		drawQuest(questId, false)
 		
-func drawQuest(questId:int, readyToBeTurnedIn:bool):
-	var quest = questLogControl.findQuest(questId)
+func drawQuest(questId:int, readyToBeTurnedIn:bool) -> Global.Quest:
+	var quest = questLogControl.findActiveQuest(questId)
 	var questNode = getQuestNodeByQuestId(questId) as RichTextLabel
 	if questNode != null:
 		if quest.questType == Global.QuestType.KILL:
@@ -331,6 +346,8 @@ func drawQuest(questId:int, readyToBeTurnedIn:bool):
 			else:
 				questNode.text = str("[font_size=18][color=bisque][outline_size=5][outline_color=black]",quest.questName, "[/outline_color][/outline_size][/color][/font_size]", "\n")
 			questNode.text += str("[outline_size=5]", quest.questDesc, "[/outline_size]")
+		return quest
+	return null
 
 func getQuestNodeByQuestId(questId:int):
 	for node in questsVBox.get_children():
@@ -354,7 +371,7 @@ func tryToCompleteQuest(questId:int):
 	return false
 	
 func markQuestReadyToTurnIn(questId:int):
-	var quest = questLogControl.findQuest(questId)
+	var quest = questLogControl.findActiveQuest(questId)
 	quest.readyToBeTurnedIn = true
 	drawQuest(questId, quest.readyToBeTurnedIn)
 	Global.quest_ready_to_turn_in.emit(questId)
@@ -363,15 +380,15 @@ func _on_heal(hp:int):
 	heal(hp)
 
 func _on_add_potion():
-	potionsCount += 1
+	PlayerData.potionsCount += 1
 	
 func usePotion():
-	if potionsCount > 0:
+	if PlayerData.potionsCount > 0:
 		Global.heal.emit(10)
-		potionsCount -= 1
+		PlayerData.potionsCount -= 1
 		
 func getPotionCount():
-	return potionsCount
+	return PlayerData.potionsCount
 
 func _on_toggle_player_attack(toggle:bool):
 	canAttack = toggle

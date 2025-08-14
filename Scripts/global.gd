@@ -60,3 +60,15 @@ func makeFlyingTextLabel(global_position:Vector2, text:String, color:Color, labe
 	
 func _on_timer_timeout(label:Label):
 	label.queue_free()
+
+class Quest:
+	var questId:int
+	var questName:String
+	var questDesc:String
+	var questType:int
+	var expReward:int
+	var numRequired:int
+	var numCompleted:int
+	var readyToBeTurnedIn:bool
+	var questComplete:bool
+	var itemId:int

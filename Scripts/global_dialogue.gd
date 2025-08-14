@@ -1,5 +1,6 @@
 extends Node
 
+var playerSprite:AnimatedSprite2D
 var dialogueIndex:int
 
 class Dialogue:
@@ -11,6 +12,7 @@ func _ready() -> void:
 	Global.increment_dialogue.connect(_on_increment_dialogue)
 	
 func init_dialogue(dialogueArrayList:Array, configFileResource:String, sections:PackedStringArray, animatedSprite:AnimatedSprite2D) -> Array:
+	playerSprite = load(PlayerData.spritePath).instantiate()
 	var config = ConfigFile.new()
 	var err = config.load(configFileResource)
 	if err != OK:
@@ -25,7 +27,7 @@ func init_dialogue(dialogueArrayList:Array, configFileResource:String, sections:
 			var value = config.get_value(section, key)
 			if value == "player":
 				dialogue.character = value
-				dialogue.animatedSprite = PlayerData.sprite
+				dialogue.animatedSprite = playerSprite
 			elif value == "other":
 				dialogue.character = value
 				dialogue.animatedSprite = animatedSprite

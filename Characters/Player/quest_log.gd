@@ -1,20 +1,6 @@
 extends Control
-
-class Quest:
-	var questId:int
-	var questName:String
-	var questDesc:String
-	var questType:int
-	var expReward:int
-	var numRequired:int
-	var numCompleted:int
-	var readyToBeTurnedIn:bool
-	var questComplete:bool
-	var itemId:int
 	
 var allQuests:Array
-var activeQuests:Array
-var completedQuests:Array
 
 func _ready() -> void:
 	var config = ConfigFile.new()
@@ -24,7 +10,7 @@ func _ready() -> void:
 		return
 	var quests = config.get_sections()
 	for q in quests:
-		var quest = Quest.new()
+		var quest = Global.Quest.new()
 		var keys = config.get_section_keys(q)
 		quest.questId = config.get_value(q, keys.get(keys.find("id")))
 		quest.questName = config.get_value(q, keys.get(keys.find("name")))
@@ -42,24 +28,20 @@ func _ready() -> void:
 		quest.questComplete = false
 		allQuests.append(quest)
 
-func findQuest(questId:int):
+func findQuest(questId:int) -> Global.Quest:
 	for quest in allQuests:
 		if quest.questId == questId:
 			return quest
+	return null
 			
-func findActiveQuest(questId:int):
-	for quest in activeQuests:
+func findActiveQuest(questId:int) -> Global.Quest:
+	for quest in PlayerData.activeQuests:
 		if quest.questId == questId:
 			return quest
+	return null
 			
 func isQuestActive(questId:int):
-	for quest in activeQuests:
-		if quest.questId == questId:
-			return true
-	return false
-
-func isQuestCompleted(questId:int):
-	for quest in completedQuests:
+	for quest in PlayerData.activeQuests:
 		if quest.questId == questId:
 			return true
 	return false
@@ -71,20 +53,21 @@ func isQuestReadyToComplete(questId:int):
 			return true
 	return false
 	
-func removeFromActiveQuests(questId:int):
+func removeFromActiveQuests(questId:int) -> Global.Quest:
 	var index = 0
-	for quest in activeQuests:
+	for quest in PlayerData.activeQuests:
 		if quest.questId == questId:
-			activeQuests.remove_at(index)
+			PlayerData.activeQuests.remove_at(index)
 			return quest
 		index += 1
 	return null
 	
-func completeQuest(questId:int):
+func completeQuest(questId:int) -> Global.Quest:
 	var index = 0
-	for quest in activeQuests:
+	for quest in PlayerData.activeQuests:
 		if quest.questId == questId:
-			activeQuests.remove_at(index)
-			completedQuests.append(quest)
+			PlayerData.activeQuests.remove_at(index)
+			PlayerData.completedQuests.append(quest)
 			return quest
 		index += 1
+	return null

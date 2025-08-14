@@ -2,8 +2,6 @@ extends Control
 
 @onready var inventoryGrid:GridContainer = $GridContainer
 
-@onready var player = get_node(".")
-
 class Item:
 	var id:int
 	var name:String
@@ -11,7 +9,6 @@ class Item:
 	var value:int
 	
 var allItems:Array
-var inventory:Array
 	
 func _ready() -> void:
 	var config = ConfigFile.new()
@@ -33,11 +30,6 @@ func _ready() -> void:
 			elif key == "value":
 				item.value = value
 		allItems.append(item)
-	inventory = [
-				null, null, null,
-				null, null, null,
-				null, null, null
-				]
 	Global.connect("item_pickup", _on_item_pickup)
 	
 func findItem(itemId:int):
@@ -53,7 +45,7 @@ func _on_item_pickup(itemId:int):
 		else:
 			var slotIndex = addItemToInventorySlot(item)
 			if slotIndex != -1:
-				inventory.set(slotIndex, item)
+				PlayerData.inventory.set(slotIndex, item)
 				#print("Item picked up: ", item.name)
 				var slotTexture = inventoryGrid.get_child(slotIndex).get_child(1) as TextureRect
 				if slotTexture:
@@ -61,7 +53,7 @@ func _on_item_pickup(itemId:int):
 		
 func addItemToInventorySlot(item:Item):
 	var index:int = 0
-	for slot in inventory:
+	for slot in PlayerData.inventory:
 		if !slot:
 			slot = item
 			return index
@@ -69,27 +61,27 @@ func addItemToInventorySlot(item:Item):
 	return -1
 	
 func findItemInInventorySlot(slotIndex:int):
-	var slot = inventory.get(slotIndex)
+	var slot = PlayerData.inventory.get(slotIndex)
 	if slot:
 		return slot
 		
 func findItemInInventory(itemId:int):
-	for index in range(inventory.size()):
-		var slot = inventory.get(index)
+	for index in range(PlayerData.inventory.size()):
+		var slot = PlayerData.inventory.get(index)
 		if slot:
 			if slot.id == itemId:
 				return slot
 				
 func findItemIndexInInventory(itemId:int):
-	for index in range(inventory.size()):
-		var slot = inventory.get(index)
+	for index in range(PlayerData.inventory.size()):
+		var slot = PlayerData.inventory.get(index)
 		if slot:
 			if slot.id == itemId:
 				return index
 				
 func removeItemInInventory(itemId:int):
 	var index = findItemIndexInInventory(itemId)
-	inventory.set(index, null)
+	PlayerData.inventory.set(index, null)
 	updateItemSlotTexture(index)
 
 func updateActiveSlotTexture(slotIndex:int, isVisible:bool):
@@ -120,5 +112,5 @@ func _on_inventory_slot_gui_input(event: InputEvent, slotIndex:int) -> void:
 		if item:
 			if item.id == 0:
 				Global.heal.emit(item.value)
-				inventory.set(slotIndex, null)
+				PlayerData.inventory.set(slotIndex, null)
 				updateItemSlotTexture(slotIndex)
