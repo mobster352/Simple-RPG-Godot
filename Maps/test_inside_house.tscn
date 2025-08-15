@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=4 uid="uid://dsd6jhdukck6d"]
+[gd_scene load_steps=23 format=4 uid="uid://dsd6jhdukck6d"]
 
 [ext_resource type="Texture2D" uid="uid://dr1r2ycdf1yfn" path="res://Resources/RPGW Bundle/houses_interriors_64_gimp.png" id="1_xqbiq"]
-[ext_resource type="Texture2D" uid="uid://dts4onym5tfkp" path="res://Resources/RPGW Bundle/sprites/chair_forward.png" id="2_xqbiq"]
+[ext_resource type="Texture2D" uid="uid://8adqowj7iwsc" path="res://Resources/RPGW Bundle/sprites/chair_forward.png" id="2_xqbiq"]
 [ext_resource type="Texture2D" uid="uid://7l4bslhb1clt" path="res://Resources/RPGW Bundle/furnitures_64.png" id="3_7maue"]
-[ext_resource type="Texture2D" uid="uid://bmmwyrc6enk5q" path="res://Resources/RPGW Bundle/sprites/black_book_forward.png" id="4_7maue"]
+[ext_resource type="Texture2D" uid="uid://cvlgmfho73bk8" path="res://Resources/RPGW Bundle/sprites/black_book_forward.png" id="4_7maue"]
 [ext_resource type="Texture2D" uid="uid://glj44lfyvfgl" path="res://Resources/RPGW Bundle/sprites/mountain_painting.png" id="5_2wt68"]
 [ext_resource type="Texture2D" uid="uid://cobwk7u1gekmd" path="res://Resources/RPGW Bundle/smallobj_64.png" id="5_xyaos"]
 
@@ -1287,12 +1287,40 @@ texture_region_size = Vector2i(64, 64)
 tile_size = Vector2i(64, 64)
 sources/0 = SubResource("TileSetAtlasSource_5b1nn")
 
-[sub_resource type="TileSet" id="TileSet_3whyw"]
-tile_size = Vector2i(64, 64)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xqbiq"]
+size = Vector2(416, 107.253)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7maue"]
+size = Vector2(128, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2wt68"]
+size = Vector2(26, 312)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xyaos"]
+size = Vector2(184, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y8neq"]
+size = Vector2(144, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gb25x"]
+size = Vector2(18, 296)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wsfrt"]
+size = Vector2(136, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_byau4"]
+size = Vector2(64, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5b1nn"]
+size = Vector2(96, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_87beu"]
+size = Vector2(64, 168)
 
 [node name="TestInsideHouse" type="Node2D"]
 
 [node name="Interiors" type="TileMapLayer" parent="."]
+z_index = -2
 tile_map_data = PackedByteArray("AAAAAAAAAgAHABMAAAAAAAEAAgAHABQAAAABAAAAAgAJABEAAAABAAEAAgAJABIAAAACAAAAAgAJABEAAAACAAEAAgAJABIAAAADAAAAAgAJABEAAAADAAEAAgAJABIAAAAEAAAAAgAJABEAAAAEAAEAAgAJABIAAAAFAAAAAgALABMAAAAFAAEAAgALABQAAAAAAAIAAgAFAB4AAAAAAAMAAgAFAB8AAAABAAIAAgAGAB4AAAABAAMAAgAGAB8AAAACAAIAAgAFAB4AAAACAAMAAgAFAB8AAAADAAIAAgAGAB4AAAADAAMAAgAGAB8AAAAEAAIAAgAFAB4AAAAEAAMAAgAFAB8AAAAFAAIAAgAGAB4AAAAFAAMAAgAGAB8AAAAAAAQAAgAFAB4AAAAAAAUAAgAFAB8AAAABAAQAAgAGAB4AAAABAAUAAgAGAB8AAAACAAQAAgAFAB4AAAACAAUAAgAFAB8AAAADAAQAAgAGAB4AAAADAAUAAgAGAB8AAAAEAAQAAgAFAB4AAAAEAAUAAgAFAB8AAAAFAAQAAgAGAB4AAAAFAAUAAgAGAB8AAAAAAP//AgABAAMAAAABAP//AgACAAMAAAACAP//AgABAAMAAAADAP//AgACAAMAAAAEAP//AgABAAMAAAAFAP//AgACAAMAAAAGAAAAAgAAAAEAAAAGAAEAAgAAAAIAAAAGAAIAAgAAAAEAAAAGAAMAAgAAAAIAAAAGAAQAAgAAAAEAAAAGAAUAAgAAAAIAAAAEAAYAAgAAAAAAAAAFAAYAAgACAAAAAAAAAAYAAgABAAAAAAD//wAAAgADAAEAAAD//wEAAgADAAIAAAD//wIAAgADAAEAAAD//wMAAgADAAIAAAD//wQAAgADAAEAAAD//wUAAgADAAIAAAAGAAYAAgABAAEAAAD//wYAAgACAAEAAAAGAP//AgABAAIAAAD/////AgACAAIAAAADAAcAAgAQABMAAAAEAAcAAgABAAEAAAABAAYAAgACAAAAAAACAAYAAgADAAAAAAACAAcAAgACAAEAAAADAAYAAgAFAB8AAAA=")
 tile_set = SubResource("TileSet_gb25x")
 
@@ -1304,6 +1332,7 @@ texture = ExtResource("2_xqbiq")
 centered = false
 
 [node name="Furniture" type="TileMapLayer" parent="."]
+z_index = -2
 tile_map_data = PackedByteArray("AAAFAAEAAQAIAAQAAAAFAAIAAQAIAAUAAAAAAAQAAQAGAAUAAAAAAAUAAQAGAAYAAAABAAQAAQAHAAUAAAABAAUAAQAHAAYAAAAAAAEAAQADAAMAAAAAAAIAAQADAAQAAAABAAEAAQAEAAMAAAABAAIAAQAEAAQAAAAEAAEAAQATAAIAAAAEAAIAAQATAAMAAAAEAAAAAQAXAAgAAAAFAAMAAQANAAEAAAAFAAQAAQANAAIAAAAFAAUAAQANAAMAAAA=")
 tile_set = SubResource("TileSet_byau4")
 
@@ -1314,12 +1343,53 @@ position = Vector2(48, 336)
 texture = ExtResource("4_7maue")
 
 [node name="MountainPainting" type="Sprite2D" parent="FrontFurniture"]
+z_index = -2
 position = Vector2(192, 40)
 texture = ExtResource("5_2wt68")
 
 [node name="SmallObjects" type="TileMapLayer" parent="."]
+z_index = -2
 tile_map_data = PackedByteArray("AAAFAAUAAAAJAAMAAAAEAAEAAAABAAYAAAAEAAAAAAAIAAQAAAA=")
 tile_set = SubResource("TileSet_87beu")
 
-[node name="Border" type="TileMapLayer" parent="."]
-tile_set = SubResource("TileSet_3whyw")
+[node name="WorldBounds" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(192, 34.3735)
+shape = SubResource("RectangleShape2D_xqbiq")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(72, 108)
+shape = SubResource("RectangleShape2D_7maue")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(-5, 244)
+shape = SubResource("RectangleShape2D_2wt68")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(100, 392)
+shape = SubResource("RectangleShape2D_xyaos")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(328, 392.5)
+shape = SubResource("RectangleShape2D_y8neq")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(393, 236)
+shape = SubResource("RectangleShape2D_gb25x")
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(316, 108)
+shape = SubResource("RectangleShape2D_wsfrt")
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(352, 144)
+shape = SubResource("RectangleShape2D_byau4")
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(56, 344)
+shape = SubResource("RectangleShape2D_5b1nn")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="WorldBounds"]
+position = Vector2(352, 300)
+shape = SubResource("RectangleShape2D_87beu")

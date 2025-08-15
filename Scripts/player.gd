@@ -84,6 +84,9 @@ func _ready() -> void:
 			var itemSlot = slot.get_child(1) as TextureRect
 			itemSlot.texture = PlayerData.inventory.get(inventoryIndex).texture
 		inventoryIndex += 1
+		
+	if Global.spawnPosition != Vector2.ZERO:
+		global_position = Global.spawnPosition
 	
 	Global.show_dialogue.connect(_on_show_dialogue)
 	Global.add_quest.connect(_on_add_quest)

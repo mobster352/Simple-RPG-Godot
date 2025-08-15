@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://jcqtdn57rifc"]
+
+[ext_resource type="Script" uid="uid://dtdqbhw078p2m" path="res://Scripts/always_run.gd" id="1_gt2rg"]
+[ext_resource type="PackedScene" uid="uid://dsd6jhdukck6d" path="res://Maps/test_inside_house.tscn" id="2_4hy4g"]
+[ext_resource type="PackedScene" uid="uid://cxa5348c0w03t" path="res://Characters/Player/player.tscn" id="3_l2ri3"]
+[ext_resource type="Script" uid="uid://bbngpkl6bbd3s" path="res://Scripts/transition_area.gd" id="4_afjt2"]
+[ext_resource type="PackedScene" uid="uid://ckndp1soujpgq" path="res://Maps/PauseMenu.tscn" id="5_8xiss"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qixgj"]
+size = Vector2(64, 32)
+
+[node name="InsideHome" type="Node2D"]
+z_as_relative = false
+script = ExtResource("1_gt2rg")
+
+[node name="GameState" type="Node2D" parent="."]
+z_as_relative = false
+
+[node name="YSort" type="Node2D" parent="GameState"]
+y_sort_enabled = true
+
+[node name="TestInsideHouse" parent="GameState/YSort" instance=ExtResource("2_4hy4g")]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="Player" parent="GameState/YSort" instance=ExtResource("3_l2ri3")]
+z_index = -1
+position = Vector2(200, 200)
+
+[node name="TransitionArea" type="Area2D" parent="GameState"]
+position = Vector2(224, 416)
+script = ExtResource("4_afjt2")
+spawnPosition = Vector2(1745, -1060)
+map = "res://Maps/StartMap.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameState/TransitionArea"]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_qixgj")
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_8xiss")]
+
+[connection signal="body_entered" from="GameState/TransitionArea" to="GameState/TransitionArea" method="_on_body_entered"]

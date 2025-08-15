@@ -13,7 +13,7 @@ var inRange:bool
 func _ready() -> void:
 	dialogueArray = GlobalDialogue.init_dialogue(dialogueArray, configFileResource, sections, sprite)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if inRange && Input.is_action_just_pressed("Use"):
 		var isFinished = GlobalDialogue.playDialogue(dialogueArray, 0)
 		if isFinished && deleteAfterRead:

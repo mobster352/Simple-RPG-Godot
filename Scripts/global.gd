@@ -29,6 +29,7 @@ enum EnemyTypes {
 }
 
 var flyingTextNode:Node
+var spawnPosition:Vector2
 
 func _ready() -> void:
 	flyingTextNode = Node.new()

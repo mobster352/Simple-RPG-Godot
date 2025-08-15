@@ -16,12 +16,15 @@ func _on_back_button_pressed() -> void:
 
 func _on_warrior_button_pressed() -> void:
 	PlayerData.initPlayer(PlayerData.PlayerTypes.WARRIOR)
-	get_tree().change_scene_to_file("res://Maps/StartMap.tscn")
+	Global.spawnPosition = Vector2.ZERO
+	get_tree().change_scene_to_file("res://Maps/InsideHome.tscn")
 
 func _on_lancer_button_pressed() -> void:
 	PlayerData.initPlayer(PlayerData.PlayerTypes.LANCER)
-	get_tree().change_scene_to_file("res://Maps/StartMap.tscn")
+	Global.spawnPosition = Vector2.ZERO
+	get_tree().change_scene_to_file("res://Maps/InsideHome.tscn")
 
 func _on_archer_button_pressed() -> void:
 	PlayerData.initPlayer(PlayerData.PlayerTypes.ARCHER)
-	get_tree().change_scene_to_file("res://Maps/StartMap.tscn")
+	Global.spawnPosition = Vector2.ZERO
+	get_tree().change_scene_to_file("res://Maps/InsideHome.tscn")
