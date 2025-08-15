@@ -1,18 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://jcqtdn57rifc"]
 
 [ext_resource type="Script" uid="uid://dtdqbhw078p2m" path="res://Scripts/always_run.gd" id="1_d41l6"]
+[ext_resource type="PackedScene" uid="uid://dsd6jhdukck6d" path="res://Maps/test_inside_house.tscn" id="2_of52u"]
 [ext_resource type="PackedScene" uid="uid://cxa5348c0w03t" path="res://Characters/Player/player.tscn" id="2_qixgj"]
 [ext_resource type="PackedScene" uid="uid://ckndp1soujpgq" path="res://Maps/PauseMenu.tscn" id="3_of52u"]
-[ext_resource type="PackedScene" uid="uid://map" path="res://Resources/Maps/test_map_rpgw/Map.tscn" id="4_qixgj"]
 
 [node name="TestMap" type="Node2D"]
 script = ExtResource("1_d41l6")
 
 [node name="GameState" type="Node2D" parent="."]
 
-[node name="map" parent="GameState" instance=ExtResource("4_qixgj")]
+[node name="TestInsideHouse" parent="GameState" instance=ExtResource("2_of52u")]
 
 [node name="Player" parent="GameState" instance=ExtResource("2_qixgj")]
-position = Vector2(88, 40)
+position = Vector2(160, 192)
 
 [node name="PauseMenu" parent="." instance=ExtResource("3_of52u")]

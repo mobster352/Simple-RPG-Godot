@@ -11,7 +11,7 @@ size = Vector2(45, 103)
 
 [node name="WarriorSprite" type="AnimatedSprite2D"]
 sprite_frames = ExtResource("1_yl3v2")
-animation = &"Block"
+animation = &"Attack"
 
 [node name="HitboxArea" type="Area2D" parent="."]
 

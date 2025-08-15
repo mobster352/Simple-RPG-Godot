@@ -91,4 +91,4 @@ Block={
 
 [rendering]
 
-environment/defaults/default_clear_color=Color(0.0513129, 0.0599224, 0.0848453, 1)
+environment/defaults/default_clear_color=Color(0.0313726, 0.054902, 0.0862745, 1)
